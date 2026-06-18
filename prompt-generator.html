@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muse Forge</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+       
+        :root {
+            --primary: #6366f1;
+        }
+       
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1135 100%);
+            color: #e2e8f0;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+       
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+       
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+       
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 8px 0;
+        }
+       
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+       
+        .card {
+            background: #1e2937;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            border: 1px solid #334155;
+        }
+       
+        .controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+       
+        .mode-toggle {
+            display: flex;
+            background: #0f172a;
+            border-radius: 9999px;
+            padding: 4px;
+            border: 1px solid #334155;
+        }
+       
+        .mode-btn {
+            padding: 10px 24px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            font-weight: 600;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+       
+        .mode-btn.active {
+            background: #6366f1;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(99 102 241 / 0.3);
+        }
+       
+        .generate-btn {
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 15px -3px rgb(99 102 241 / 0.4);
+        }
+       
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -3px rgb(99 102 241 / 0.5);
+        }
+       
+        .output-container {
+            margin-top: 24px;
+        }
+       
+        .output-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+       
+        .prompt-box {
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 16px;
+            padding: 24px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #e0e7ff;
+            white-space: pre-wrap;
+            word-break: break-word;
+            min-height: 140px;
+            position: relative;
+        }
+       
+        .copy-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #334155;
+            color: #cbd5e1;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+       
+        .copy-btn:hover {
+            background: #475569;
+        }
+       
+        .breakdown {
+            margin-top: 24px;
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #334155;
+        }
+       
+        .breakdown h4 {
+            margin: 0 0 12px 0;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+       
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+       
+        .breakdown-item {
+            background: #1e2937;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.875rem;
+        }
+       
+        .breakdown-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+       
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+       
+        .badge {
+            display: inline-block;
+            background: #334155;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            padding: 2px 10px;
+            border-radius: 9999px;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Muse Forge</h1>
+            <p class="subtitle">Crafting realistic female prompts</p>
+        </header>
+        <div class="card">
+            <!-- Controls -->
+            <div class="controls">
+                <div class="mode-toggle">
+                    <button id="sfw-btn" class="mode-btn active" onclick="setMode('sfw')">SFW</button>
+                    <button id="nsfw-btn" class="mode-btn" onclick="setMode('nsfw')">NSFW</button>
+                </div>
+               
+                <button onclick="generatePrompt()" class="generate-btn">
+                    ✨ Forge Prompt
+                </button>
+               
+                <button onclick="generatePrompt(true)" style="background:#334155; color:#cbd5e1; border:none; padding:14px 24px; border-radius:9999px; font-weight:600; cursor:pointer;">
+                    Regenerate
+                </button>
+            </div>
+            <!-- Output -->
+            <div class="output-container">
+                <div class="output-label">
+                    <span>Generated Prompt</span>
+                    <span class="badge" id="mode-badge">SFW</span>
+                </div>
+               
+                <div class="prompt-box" id="prompt-output">
+                    Click "Forge Prompt" to create a new prompt...
+                </div>
+               
+                <button onclick="copyPrompt()" class="copy-btn" style="position:relative; top:0; right:0; margin-top:12px;">
+                    📋 Copy to Clipboard
+                </button>
+            </div>
+            <!-- Breakdown -->
+            <div class="breakdown" id="breakdown-section" style="display:none;">
+                <h4>Breakdown</h4>
+                <div class="breakdown-grid" id="breakdown-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p>Created by <a href="https://x.com/Farah_ai_" target="_blank" style="color: #a855f7; text-decoration: none;">Farah</a></p>
+        </footer>
+    </div>
+    <script>
+        const pools = {
+            // ==================== EXPANDED POOLS ====================
+            sfw_photo: [
+                "candid iPhone selfie", "natural daylight portrait", "professional studio portrait",
+                "casual smartphone photo", "mirror selfie in natural light", "street photography style",
+                "soft window light portrait", "golden hour outdoor shot", "cozy indoor natural light",
+                "documentary style photo", "warm afternoon sunlight portrait",
+                "sharp modern iPhone 16 front camera selfie", "clear unfiltered smartphone snap",
+                "bright bathroom mirror selfie with ring light", "everyday casual phone photo",
+                "selfie in bright natural daylight", "clean crisp iPhone portrait mode",
+                "unfiltered morning light selfie", "high detail phone camera shot",
+                "modern vertical smartphone photo", "fresh faced iPhone candid",
+                "bright natural daylight with even soft lighting", "clean crisp morning sunlight",
+                "soft diffused window light creating flattering glow", "warm golden hour sunlight",
+                "overcast day natural light portrait", "soft indoor window light", "subtle ring light selfie",
+                "harsh midday sunlight portrait", "evening golden hour outdoor shot"
+            ],
+            nsfw_photo: [
+                "raw candid amateur iPhone mirror selfie", "thirst trap bathroom selfie",
+                "seductive bedroom mirror shot", "explicit close-up iPhone photo",
+                "provocative pose with phone camera", "steamy shower selfie", "intimate candid shot",
+                "erotic amateur photography", "sultry front camera selfie", "bold NSFW mirror selfie",
+                "sharp modern iPhone 16 mirror selfie", "clear unfiltered lewd phone snap",
+                "bright bathroom mirror thirst trap", "everyday casual explicit phone photo",
+                "dim bedroom lighting selfie", "harsh flash mirror selfie", "soft lamp light bedroom shot"
+            ],
+            ethnicity: [
+                "Caucasian", "East Asian", "Latina", "South Asian", "Black/African", "Middle Eastern",
+                "Mixed race", "Nordic/Scandinavian", "Mediterranean", "Southeast Asian", "Brazilian",
+                "Korean", "Japanese", "Indian", "Nigerian", "Persian", "Eurasian", "Polynesian",
+                "Native American", "Pacific Islander", "Caribbean", "Eastern European", "Central Asian"
+            ],
+            hair_colour: [
+                "black", "jet black", "deep brown", "rich chestnut", "warm brown", "light brown",
+                "golden brown", "auburn", "copper red", "bright ginger", "strawberry blonde",
+                "honey blonde", "ash blonde", "platinum blonde", "golden blonde", "gray", "silver",
+                "salt and pepper", "dyed vibrant red", "dyed purple-black", "dyed pastel pink",
+                "dyed icy blue", "dark brown with subtle highlights", "light brown with caramel tones"
+            ],
+            eye_colour: [
+                "deep brown", "warm brown", "light brown", "hazel", "green-hazel", "emerald green",
+                "bright blue", "steel blue", "gray-blue", "amber", "olive green", "dark brown with golden flecks",
+                "honey brown", "forest green", "icy blue", "warm hazel", "dark gray", "light hazel with gold"
+            ],
+            eye_shape: [
+                "almond-shaped", "large and expressive", "doe-like and wide", "hooded", "upturned",
+                "downturned", "narrow cat-like", "deep-set", "wide-set", "close-set", "bulging",
+                "small and round", "asymmetrical", "heavy-lidded", "round and innocent",
+                "slightly hooded", "wide and doe-like", "narrow and sharp", "soft and rounded"
+            ],
+            face_shape: [
+                "heart-shaped face", "oval face", "round face", "square face",
+                "diamond-shaped face", "asymmetrical face", "long rectangular face",
+                "triangular face", "soft square face", "narrow long face",
+                "soft heart-shaped face", "slightly square face", "gentle oval face",
+                "broad round face", "delicate heart face"
+            ],
+            nose: [
+                "small straight nose with soft rounded tip", "delicate button nose with slight upturn",
+                "refined aquiline nose", "wide flat nose with broad bridge", "long prominent nose",
+                "hooked nose with bump", "bulbous rounded nose", "crooked slightly bent nose",
+                "asymmetrical nose", "broad nose with flared nostrils",
+                "small upturned nose", "straight nose with defined bridge", "soft rounded nose",
+                "slightly wide nose", "delicate narrow nose"
+            ],
+            lips: [
+                "full plump lips with perfect cupid's bow", "naturally pink full lips",
+                "soft pillowy lower lip with defined upper", "thin narrow lips", "uneven asymmetrical lips",
+                "full lower lip with thin upper", "puffy overfilled looking lips", "uneven cupid's bow",
+                "soft natural lips", "slightly thin lips", "full and soft lips",
+                "defined cupid's bow", "gentle natural lip shape"
+            ],
+            cheeks_jaw: [
+                "high cheekbones with subtle blush", "soft rounded cheeks with youthful glow",
+                "defined yet soft jawline", "hollow sunken cheeks", "double chin with soft jaw",
+                "weak recessed chin", "uneven jawline", "full cheeks with weak chin",
+                "soft jawline with gentle curve", "high cheekbones", "rounded soft cheeks",
+                "defined jaw softened by femininity", "subtle cheekbones"
+            ],
+            additional_face: [
+                "light freckles across nose and cheeks", "subtle beauty mark above lip",
+                "visible pores and texture", "acne scars on cheeks", "uneven skin tone with redness",
+                "bushy thick eyebrows", "thin sparse eyebrows", "dark circles under eyes",
+                "prominent forehead lines", "dull skin with texture",
+                "light freckles", "small beauty marks", "subtle skin texture",
+                "natural eyebrow shape", "soft under-eye area"
+            ],
+            woman_desc: [
+                "beautiful", "attractive", "cute", "stunning", "pretty",
+                "average-looking", "normal everyday", "girl-next-door type",
+                "naturally pretty", "charming", "sweet-faced",
+                "relatable everyday", "plain but cute", "fresh-faced regular",
+                "soft-featured average", "approachable regular", "cute normal",
+                "unremarkable but charming", "everyday", "cute but average",
+                "relatable", "ordinary but endearing", "soft and natural looking"
+            ],
+            sfw_style: [
+                "alt girl", "goth girl", "preppy girl", "boho girl", "girl-next-door",
+                "artistic girl", "bookish girl", "sporty girl", "elegant girl", "soft girl",
+                "tomboy", "creative girl", "indie girl", "cozy girl", "minimalist girl",
+                "artsy girl", "quiet girl", "outdoorsy girl", "homebody type"
+            ],
+            nsfw_style: [
+                "seductive alt girl", "goth temptress", "bratty alt girl", "sultry girl-next-door",
+                "playful goth girl", "dominant alt girl", "submissive alt girl", "teasing goth",
+                "seductive goth girl", "mysterious alt girl", "fitness model type", "nerdy alt girl",
+                "wild party girl", "confident vixen", "teasing alt girl", "sultry goth",
+                "playful submissive", "bold and flirty"
+            ],
+            sfw_pose: [
+                "warm smiling at camera with gentle head tilt", "natural relaxed pose looking directly at viewer",
+                "slight smile and thoughtful expression", "laughing joyfully", "confident direct gaze with soft eyes",
+                "casual mirror selfie with soft smile", "sitting on bed with knees up looking at camera",
+                "cozy indoor reading pose with book", "gentle head tilt with genuine laugh",
+                "soft smile looking slightly away", "relaxed standing pose", "thoughtful expression"
+            ],
+            nsfw_pose: [
+                "seductive pose with hand on hip", "arching back slightly", "biting lip seductively with intense eye contact",
+                "provocative lean forward", "playful tongue out", "sultry bedroom eyes half-lidded",
+                "kneeling on bed with come-hither look", "sitting with knees apart teasingly",
+                "back view mirror selfie looking over shoulder with seductive glance",
+                "arching back on bed", "playful teasing expression", "confident seductive stare"
+            ],
+            body_type: [
+                "voluptuous hourglass figure",
+                "slender petite frame",
+                "curvy thick body",
+                "athletic toned body",
+                "soft chubby body",
+                "plump BBW figure",
+                "fit and toned body",
+                "soft and curvy body",
+                "slim and delicate frame",
+                "full-figured body"
+            ],
+            breasts: [
+                "large natural breasts",
+                "full heavy breasts with dark prominent nipples",
+                "perky D-cup breasts with puffy pink nipples",
+                "medium teardrop breasts with sensitive nipples",
+                "small perky breasts",
+                "heavy natural breasts",
+                "soft natural breasts",
+                "perky medium breasts",
+                "full and heavy breasts"
+            ],
+            lower_body: [
+                "wide hips and thick juicy thighs",
+                "round bubble butt and soft feminine curves",
+                "slim waist flaring to wide hips",
+                "toned legs and plush thighs",
+                "full soft ass and thick thighs",
+                "soft wide hips",
+                "curvy hips and thighs",
+                "slim legs with soft thighs"
+            ]
+        };
+
+        let currentMode = 'sfw';
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('sfw-btn').classList.toggle('active', mode === 'sfw');
+            document.getElementById('nsfw-btn').classList.toggle('active', mode === 'nsfw');
+            document.getElementById('mode-badge').textContent = mode.toUpperCase();
+        }
+
+        function getRandom(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function generatePrompt(regenerate = false) {
+            const photoPool = currentMode === 'sfw' ? pools.sfw_photo : pools.nsfw_photo;
+            const stylePool = currentMode === 'sfw' ? pools.sfw_style : pools.nsfw_style;
+            const posePool = currentMode === 'sfw' ? pools.sfw_pose : pools.nsfw_pose;
+
+            const photo = `amateur ${getRandom(photoPool)}`;
+            const ethnicity = getRandom(pools.ethnicity);
+            const womanDesc = getRandom(pools.woman_desc);
+
+            const faceShape = getRandom(pools.face_shape);
+            const eyeColour = getRandom(pools.eye_colour);
+            const eyeShape = getRandom(pools.eye_shape);
+            const nose = getRandom(pools.nose);
+            const lips = getRandom(pools.lips);
+            const cheeksJaw = getRandom(pools.cheeks_jaw);
+            const extra = getRandom(pools.additional_face);
+            const hairColour = getRandom(pools.hair_colour);
+
+            let faceDesc = `${faceShape}, ${cheeksJaw}, ${nose}, ${lips}, ${extra}, her eyes are ${eyeColour} and ${eyeShape}, ${hairColour} hair`;
+
+            let bodyPart = '';
+            if (currentMode === 'nsfw') {
+                const bodyType = getRandom(pools.body_type);
+                const breasts = getRandom(pools.breasts);
+                const lowerBody = getRandom(pools.lower_body);
+                bodyPart = `, ${bodyType} with ${breasts} and ${lowerBody}`;
+            }
+
+            const style = getRandom(stylePool);
+            const pose = getRandom(posePool);
+
+            let prompt = `${photo} of a ${ethnicity} ${womanDesc} woman with ${faceDesc}${bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture`;
+
+            document.getElementById('prompt-output').innerHTML = prompt;
+            document.getElementById('mode-badge').textContent = currentMode.toUpperCase();
+
+            showBreakdown({
+                photo, ethnicity, womanDesc, faceShape, eyeColour, eyeShape,
+                nose, lips, cheeksJaw, hairColour, style, pose, bodyPart: currentMode === 'nsfw' ? getRandom(pools.body_type) + " with " + getRandom(pools.breasts) + " and " + getRandom(pools.lower_body) : null
+            });
+        }
+
+        function showBreakdown(data) {
+            const grid = document.getElementById('breakdown-grid');
+            grid.innerHTML = '';
+
+            const items = [
+                { label: 'Photo Style', value: data.photo },
+                { label: 'Ethnicity', value: data.ethnicity },
+                { label: 'Descriptor', value: data.womanDesc },
+                { label: 'Face Shape', value: data.faceShape },
+                { label: 'Cheeks & Jaw', value: data.cheeksJaw },
+                { label: 'Eyes', value: `her eyes are ${data.eyeColour} and ${data.eyeShape}` },
+                { label: 'Hair', value: data.hairColour + ' hair' },
+                { label: 'Nose / Lips', value: `${data.nose} • ${data.lips}` },
+                { label: 'Style', value: data.style },
+                { label: 'Pose', value: data.pose }
+            ];
+
+            if (data.bodyPart) {
+                items.push({ label: 'Body (NSFW)', value: data.bodyPart });
+            }
+
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'breakdown-item';
+                div.innerHTML = `
+                    <div class="breakdown-label">${item.label}</div>
+                    <div style="color:#e0e7ff;">${item.value}</div>
+                `;
+                grid.appendChild(div);
+            });
+
+            document.getElementById('breakdown-section').style.display = 'block';
+        }
+
+        function copyPrompt() {
+            const promptText = document.getElementById('prompt-output').innerText;
+            if (!promptText || promptText.includes('Click "Forge Prompt')) {
+                alert('Please generate a prompt first!');
+                return;
+            }
+           
+            navigator.clipboard.writeText(promptText).then(() => {
+                const btns = document.querySelectorAll('.copy-btn');
+                btns.forEach(btn => {
+                    const original = btn.innerText;
+                    btn.innerText = '✅ Copied!';
+                    setTimeout(() => {
+                        btn.innerText = original;
+                    }, 2000);
+                });
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = promptText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Prompt copied to clipboard!');
+            });
+        }
+
+        window.onload = function() {
+            setMode('sfw');
+            setTimeout(() => {
+                generatePrompt();
+            }, 600);
+        };
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === '/' && document.activeElement.tagName === 'BODY') {
+                e.preventDefault();
+                generatePrompt();
+            }
+        });
+    </script>
+</body>
+</html>
