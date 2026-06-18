@@ -67,35 +67,29 @@
             border: 1px solid #334155;
         }
        
-        .mode-btn {
-            padding: 10px 24px;
-            border: none;
-            background: transparent;
-            color: #94a3b8;
-            font-weight: 600;
-            border-radius: 9999px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-       
         .mode-btn.active {
-            background: #6366f1;
-            color: white;
-            box-shadow: 0 4px 6px -1px rgb(99 102 241 / 0.3);
-        }
-       
-        .generate-btn {
-            background: linear-gradient(90deg, #6366f1, #a855f7);
-            color: white;
-            border: none;
-            padding: 14px 40px;
-            font-size: 1.05rem;
-            font-weight: 600;
-            border-radius: 9999px;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 10px 15px -3px rgb(99 102 241 / 0.4);
-        }
+    background: #4f46e5;                    /* Deep indigo */
+    color: white;
+    box-shadow: 0 4px 6px -1px rgb(79 70 229 / 0.4);
+}
+
+.generate-btn {
+    background: linear-gradient(90deg, #4f46e5, #7c3aed);   /* Deep indigo to violet */
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 10px 15px -3px rgb(79 70 229 / 0.4);
+}
+
+.generate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 20px -3px rgb(79 70 229 / 0.5);
+}
        
         .generate-btn:hover {
             transform: translateY(-2px);
