@@ -522,32 +522,45 @@
         }
 
         function displayImages(images, title) {
-            document.querySelectorAll('.generated-images').forEach(el => el.remove());
+    console.log("Images received in displayImages:", images); // ← Add this
 
-            const container = document.createElement('div');
-            container.className = 'generated-images';
+    document.querySelectorAll('.generated-images').forEach(el => el.remove());
 
-            let html = `<strong style="display:block; margin-bottom:12px; color:#94a3b8;">${title}</strong>`;
+    const container = document.createElement('div');
+    container.className = 'generated-images';
 
-            images.forEach((imgSrc, index) => {
-                if (!imgSrc) return;
+    let html = `<strong style="display:block; margin-bottom:12px; color:#94a3b8;">${title}</strong>`;
 
-                const src = (typeof imgSrc === 'object' && imgSrc.url) ? imgSrc.url : imgSrc;
+    images.forEach((imgSrc, index) => {
+        console.log(`Image ${index}:`, imgSrc); // ← Add this too
 
-                html += `
-                    <div style="margin-bottom: 20px;">
-                        <img src="${src}" 
-                             style="width:100%; max-width:320px; border-radius:16px; border:1px solid #334155; display:block;"
-                             alt="Generated image ${index + 1}">
-                        
-                        <div class="image-actions">
-                            <button onclick="downloadImage('${src}', ${index})" class="download-btn">
-                                ⬇️ Download
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
+        if (!imgSrc) {
+            console.warn(`Image ${index} is empty/null`);
+            return;
+        }
+
+        let src = imgSrc;
+        if (typeof src === 'object' && src.url) src = src.url;
+
+        html += `
+            <div style="margin-bottom: 20px;">
+                <img src="${src}" 
+                     style="width:100%; max-width:320px; border-radius:16px; border:1px solid #334155; display:block;"
+                     alt="Generated image ${index + 1}">
+                
+                <div class="image-actions">
+                    <button onclick="downloadImage('${src}', ${index})" class="download-btn">
+                        ⬇️ Download
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+    const buttonsContainer = document.getElementById('image-generation-buttons');
+    buttonsContainer.parentNode.appendChild(container);
+}
 
             container.innerHTML = html;
 
