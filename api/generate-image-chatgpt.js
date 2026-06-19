@@ -17,7 +17,7 @@ export default async function handler(req, res) {
                 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
             },
             body: JSON.stringify({
-                model: "gpt-image-1",
+                model: "dall-e-3",           // ← Changed to dall-e-3
                 prompt: prompt,
                 n: n,
                 size: "1024x1024"
@@ -27,15 +27,19 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         if (!response.ok) {
-            return res.status(response.status).json({ 
-                error: data.error?.message || 'Image generation failed' 
+            console.error("OpenAI Error:", data);
+            return res.status(response.status).json({
+                error: data.error?.message || 'Image generation failed'
             });
         }
 
+        // dall-e-3 returns URLs
         const images = data.data.map(img => img.url);
+
         return res.status(200).json({ images });
 
     } catch (error) {
+        console.error("Backend Error:", error);
         return res.status(500).json({ error: 'Internal server error' });
     }
 }
