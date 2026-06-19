@@ -1,217 +1,513 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Muse Forge AI</title>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
-
-body{
-    font-family:'Inter',system-ui,sans-serif;
-    background:linear-gradient(135deg,#0a1f1c 0%,#0f172a 100%);
-    color:#e2e8f0;
-    margin:0;
-    padding:40px 20px;
-}
-
-.container{max-width:900px;margin:auto;}
-header{text-align:center;margin-bottom:40px;}
-h1{
-    font-family:'Space Grotesk',sans-serif;
-    font-size:2.8rem;
-    margin:0;
-}
-.subtitle{color:#94a3b8;}
-
-.card{
-    background:#1a2332;
-    border:1px solid #334155;
-    border-radius:20px;
-    padding:32px;
-}
-
-.controls{
-    display:flex;
-    gap:16px;
-    flex-wrap:wrap;
-    margin-bottom:24px;
-}
-
-.mode-toggle{
-    display:flex;
-    background:#0f172a;
-    border:1px solid #334155;
-    border-radius:999px;
-    padding:4px;
-}
-
-.mode-btn,.generate-btn,.secondary-btn,.grok-btn,.chatgpt-btn{
-    border:none;
-    cursor:pointer;
-    border-radius:999px;
-    font-weight:600;
-}
-
-.mode-btn{
-    background:transparent;
-    color:#94a3b8;
-    padding:10px 24px;
-}
-
-.mode-btn.active{
-    background:#4f46e5;
-    color:white;
-}
-
-.generate-btn,.grok-btn{
-    background:linear-gradient(90deg,#0f766e,#1e40af);
-    color:white;
-    padding:14px 24px;
-}
-
-.chatgpt-btn{
-    background:linear-gradient(90deg,#10a37f,#0d8a6a);
-    color:white;
-    padding:14px 24px;
-}
-
-.secondary-btn{
-    background:#334155;
-    color:#cbd5e1;
-    padding:14px 24px;
-}
-
-.prompt-box{
-    background:#0f172a;
-    border:2px solid #334155;
-    border-radius:16px;
-    padding:24px;
-    min-height:140px;
-    white-space:pre-wrap;
-}
-
-.copy-btn{
-    margin-top:12px;
-    padding:10px 16px;
-}
-
-.breakdown{
-    display:none;
-    margin-top:24px;
-}
-
-.breakdown-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:12px;
-}
-
-.breakdown-item{
-    background:#1e2937;
-    padding:12px;
-    border-radius:10px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muse Forge AI</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+      
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+            background: linear-gradient(135deg, #0a1f1c 0%, #0f172a 100%);
+            color: #e2e8f0;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+      
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+      
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+      
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, #0f766e, #1e40af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 8px 0;
+        }
+      
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+      
+        .card {
+            background: #1a2332;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            border: 1px solid #334155;
+        }
+      
+        .controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+      
+        .mode-toggle {
+            display: flex;
+            background: #0f172a;
+            border-radius: 9999px;
+            padding: 4px;
+            border: 1px solid #334155;
+        }
+      
+        .mode-btn {
+            padding: 10px 24px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            font-weight: 600;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+      
+        .mode-btn.active {
+            background: #4f46e5;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(99 102 241 / 0.3);
+        }
+      
+        .generate-btn {
+            background: linear-gradient(90deg, #0f766e, #1e40af);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 15px -3px rgb(15 118 110 / 0.4);
+        }
+      
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -3px rgb(15 118 110 / 0.5);
+        }
+      
+        .output-container {
+            margin-top: 24px;
+            position: relative;
+        }
+      
+        .output-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+      
+        .prompt-box {
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 16px;
+            padding: 24px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #e0e7ff;
+            white-space: pre-wrap;
+            word-break: break-word;
+            min-height: 140px;
+        }
+      
+        .copy-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #334155;
+            color: #cbd5e1;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+      
+        .copy-btn:hover {
+            background: #475569;
+        }
+      
+        .grok-btn {
+            background: linear-gradient(90deg, #0f766e, #1e40af);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 15px -3px rgb(15 118 110 / 0.4);
+            margin-top: 12px;
+            width: 100%;
+            max-width: 320px;
+        }
+      
+        .grok-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -3px rgb(15 118 110 / 0.5);
+        }
+      
+        .chatgpt-btn {
+            background: linear-gradient(90deg, #10a37f, #0d8a6a);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 15px -3px rgb(16 163 127 / 0.4);
+            margin-top: 12px;
+            width: 100%;
+            max-width: 320px;
+        }
+      
+        .chatgpt-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -3px rgb(16 163 127 / 0.5);
+        }
+      
+        .breakdown {
+            margin-top: 24px;
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #334155;
+        }
+      
+        .breakdown h4 {
+            margin: 0 0 12px 0;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+      
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+      
+        .breakdown-item {
+            background: #1e2937;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.875rem;
+        }
+      
+        .breakdown-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+      
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+      
+        .badge {
+            display: inline-block;
+            background: #334155;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            padding: 2px 10px;
+            border-radius: 9999px;
+            margin-left: 8px;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>Muse Forge AI</h1>
+            <p class="subtitle">Crafting realistic female prompts</p>
+        </header>
+        
+        <div class="card">
+            <!-- Controls -->
+            <div class="controls">
+                <div class="mode-toggle">
+                    <button id="sfw-btn" class="mode-btn active" onclick="setMode('sfw')">SFW</button>
+                    <button id="nsfw-btn" class="mode-btn" onclick="setMode('nsfw')">NSFW</button>
+                </div>
+                
+                <button onclick="generatePrompt()" class="generate-btn">
+                    ✨ Forge Prompt
+                </button>
+                
+                <button onclick="generatePrompt(true)" style="background:#334155; color:#cbd5e1; border:none; padding:14px 24px; border-radius:9999px; font-weight:600; cursor:pointer;">
+                    Regenerate
+                </button>
+            </div>
 
-<div class="container">
-<header>
-<h1>Muse Forge AI</h1>
-<p class="subtitle">Crafting realistic female prompts</p>
-</header>
+            <!-- Prompt Output -->
+            <div class="output-container">
+                <div class="output-label">
+                    <span>Generated Prompt</span>
+                    <span class="badge" id="mode-badge">SFW</span>
+                </div>
+                
+                <div class="prompt-box" id="prompt-output">
+                    Click "Forge Prompt" to create a new prompt...
+                </div>
+                
+                <button onclick="copyPrompt()" class="copy-btn">
+                    📋 Copy to Clipboard
+                </button>
 
-<div class="card">
+                <!-- Both Buttons -->
+                <div id="image-generation-buttons" style="display: none; margin-top: 16px;">
+                    <button onclick="generateWithGrok()" class="grok-btn">
+                        🖼️ Generate with Grok
+                    </button>
+                    
+                    <button onclick="generateWithChatGPT()" class="chatgpt-btn">
+                        🖼️ Generate with ChatGPT
+                    </button>
+                </div>
+            </div>
 
-<div class="controls">
-<div class="mode-toggle">
-<button id="sfw-btn" class="mode-btn active" onclick="setMode('sfw')">SFW</button>
-<button id="nsfw-btn" class="mode-btn" onclick="setMode('nsfw')">NSFW</button>
-</div>
+            <!-- Breakdown -->
+            <div class="breakdown" id="breakdown-section" style="display:none;">
+                <h4>Breakdown</h4>
+                <div class="breakdown-grid" id="breakdown-grid"></div>
+            </div>
+        </div>
 
-<button class="generate-btn" onclick="generatePrompt()">✨ Forge Prompt</button>
-<button class="secondary-btn" onclick="generatePrompt()">Regenerate</button>
-</div>
+        <footer>
+            <p>Created by <a href="https://x.com/Farah_ai_" target="_blank" style="color: #a855f7; text-decoration: none;">Farah</a></p>
+        </footer>
+    </div>
 
-<div id="prompt-output" class="prompt-box">Click "Forge Prompt" to create a new prompt...</div>
+    <script>
+        const pools = {
+            sfw_photo: ["candid iPhone selfie", "natural daylight portrait", "professional studio portrait", "casual smartphone photo", "mirror selfie in natural light"],
+            nsfw_photo: ["raw candid amateur iPhone mirror selfie", "thirst trap bathroom selfie", "seductive bedroom mirror shot"],
+            ethnicity: ["Caucasian", "East Asian", "Latina", "South Asian", "Black/African", "Brazilian"],
+            hair_colour: ["black", "deep brown", "warm brown", "golden blonde", "light brown"],
+            eye_colour: ["deep brown", "hazel", "emerald green", "bright blue", "amber"],
+            eye_shape: ["almond-shaped", "large and expressive", "hooded"],
+            face_shape: ["heart-shaped face", "oval face", "round face"],
+            nose: ["small straight nose", "delicate button nose"],
+            lips: ["full plump lips", "soft natural lips"],
+            cheeks_jaw: ["soft rounded cheeks", "defined yet soft jawline"],
+            additional_face: ["visible pores and texture", "light freckles"],
+            woman_desc: ["beautiful", "attractive", "cute", "average-looking", "soft-featured average"],
+            sfw_style: ["alt girl", "goth girl", "preppy girl", "boho girl", "girl-next-door"],
+            nsfw_style: ["seductive alt girl", "goth temptress", "sultry girl-next-door"],
+            sfw_pose: ["warm smiling at camera", "natural relaxed pose", "casual mirror selfie with soft smile"],
+            nsfw_pose: ["seductive pose with hand on hip", "sultry bedroom eyes half-lidded"],
+            body_type: ["voluptuous hourglass figure", "curvy thick body"],
+            breasts: ["large natural breasts", "perky D-cup breasts"],
+            lower_body: ["wide hips and thick juicy thighs", "round bubble butt"]
+        };
 
-<button class="copy-btn" onclick="copyPrompt()">📋 Copy Prompt</button>
+        let currentMode = 'sfw';
 
-<div id="image-generation-buttons" style="display:none;margin-top:16px;">
-<button class="grok-btn" onclick="generateWithGrok(this)">🖼️ Generate with Grok</button>
-<button class="chatgpt-btn" onclick="generateWithChatGPT(this)">🖼️ Generate with ChatGPT</button>
-</div>
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('sfw-btn').classList.toggle('active', mode === 'sfw');
+            document.getElementById('nsfw-btn').classList.toggle('active', mode === 'nsfw');
+            document.getElementById('mode-badge').textContent = mode.toUpperCase();
 
-<div id="breakdown-section" class="breakdown">
-<h3>Breakdown</h3>
-<div id="breakdown-grid" class="breakdown-grid"></div>
-</div>
+            const imageButtons = document.getElementById('image-generation-buttons');
+            imageButtons.style.display = (mode === 'sfw') ? 'block' : 'none';
+        }
 
-</div>
-</div>
+        function getRandom(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
 
-<script>
-const pools={
-sfw_photo:["amateur candid iPhone selfie","amateur natural daylight portrait","amateur casual smartphone photo","amateur mirror selfie in natural light"],
-nsfw_photo:["amateur thirst trap bathroom selfie","amateur seductive bedroom mirror shot"],
-ethnicity:["Caucasian","East Asian","Latina","South Asian","Black/African","Brazilian"],
-hair_colour:["black","deep brown","warm brown","golden blonde","light brown"],
-eye_colour:["deep brown","hazel","emerald green","bright blue","amber"],
-eye_shape:["almond-shaped","large and expressive","hooded"],
-face_shape:["heart-shaped face","oval face","round face"],
-nose:["small straight nose","delicate button nose"],
-lips:["full plump lips","soft natural lips"],
-cheeks_jaw:["soft rounded cheeks","defined yet soft jawline"],
-additional_face:["visible pores and texture","light freckles"],
-woman_desc:["beautiful","attractive","cute","average-looking"],
-sfw_style:["alt girl","goth girl","boho girl","girl-next-door"],
-nsfw_style:["seductive alt girl","goth temptress"],
-sfw_pose:["warm smiling at camera","natural relaxed pose","casual mirror selfie with soft smile"],
-nsfw_pose:["seductive pose with hand on hip"],
-body_type:["voluptuous hourglass figure","curvy thick body"],
-breasts:["large natural breasts","perky D-cup breasts"],
-lower_body:["wide hips and thick thighs","round bubble butt"]
-};
+        function generatePrompt() {
+            const photoPool = currentMode === 'sfw' ? pools.sfw_photo : pools.nsfw_photo;
+            const stylePool = currentMode === 'sfw' ? pools.sfw_style : pools.nsfw_style;
+            const posePool = currentMode === 'sfw' ? pools.sfw_pose : pools.nsfw_pose;
 
-let currentMode='sfw';
+            const photo = `amateur ${getRandom(photoPool)}`;
+            const ethnicity = getRandom(pools.ethnicity);
+            const womanDesc = getRandom(pools.woman_desc);
 
-function rand(a){return a[Math.floor(Math.random()*a.length)];}
+            const faceShape = getRandom(pools.face_shape);
+            const eyeColour = getRandom(pools.eye_colour);
+            const eyeShape = getRandom(pools.eye_shape);
+            const nose = getRandom(pools.nose);
+            const lips = getRandom(pools.lips);
+            const cheeksJaw = getRandom(pools.cheeks_jaw);
+            const extra = getRandom(pools.additional_face);
+            const hairColour = getRandom(pools.hair_colour);
 
-function setMode(mode){
- currentMode=mode;
- document.getElementById('sfw-btn').classList.toggle('active',mode==='sfw');
- document.getElementById('nsfw-btn').classList.toggle('active',mode==='nsfw');
- document.getElementById('image-generation-buttons').style.display=mode==='sfw'?'block':'none';
-}
+            let faceDesc = `${faceShape}, ${cheeksJaw}, ${nose}, ${lips}, ${extra}, her eyes are ${eyeColour} and ${eyeShape}, ${hairColour} hair`;
 
-function generatePrompt(){
- const photo=rand(currentMode==='sfw'?pools.sfw_photo:pools.nsfw_photo);
- const face=`${rand(pools.face_shape)}, ${rand(pools.cheeks_jaw)}, ${rand(pools.nose)}, ${rand(pools.lips)}, ${rand(pools.additional_face)}, her eyes are ${rand(pools.eye_colour)} and ${rand(pools.eye_shape)}, ${rand(pools.hair_colour)} hair`;
+            let bodyPart = '';
+            if (currentMode === 'nsfw') {
+                const bodyType = getRandom(pools.body_type);
+                const breasts = getRandom(pools.breasts);
+                const lowerBody = getRandom(pools.lower_body);
+                bodyPart = `, ${bodyType} with ${breasts} and ${lowerBody}`;
+            }
 
- let body='';
- if(currentMode==='nsfw'){
-   body=`, ${rand(pools.body_type)} with ${rand(pools.breasts)} and ${rand(pools.lower_body)}`;
- }
+            const style = getRandom(stylePool);
+            const pose = getRandom(posePool);
 
- const prompt=`${photo} of a ${rand(pools.ethnicity)} ${rand(pools.woman_desc)} woman with ${face}${body}, ${rand(currentMode==='sfw'?pools.sfw_style:pools.nsfw_style)}, ${rand(currentMode==='sfw'?pools.sfw_pose:pools.nsfw_pose)}, natural skin with visible pores and subtle texture`;
+            const prompt = `${photo} of a ${ethnicity} ${womanDesc} woman with \( {faceDesc} \){bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture`;
 
- document.getElementById('prompt-output').textContent=prompt;
-}
+            document.getElementById('prompt-output').innerHTML = prompt;
+            document.getElementById('mode-badge').textContent = currentMode.toUpperCase();
 
-function copyPrompt(){
- navigator.clipboard.writeText(document.getElementById('prompt-output').textContent);
-}
+            showBreakdown({
+                photo, ethnicity, womanDesc, faceShape, eyeColour, eyeShape,
+                nose, lips, cheeksJaw, hairColour, style, pose, bodyPart
+            });
+        }
 
-async function generateWithGrok(btn){ alert('Connect your Grok API endpoint here.'); }
-async function generateWithChatGPT(btn){ alert('Connect your ChatGPT API endpoint here.'); }
+        function showBreakdown(data) {
+            const grid = document.getElementById('breakdown-grid');
+            grid.innerHTML = '';
 
-window.onload=()=>{
- setMode('sfw');
- generatePrompt();
-};
-</script>
+            const items = [
+                { label: 'Photo Style', value: data.photo },
+                { label: 'Ethnicity', value: data.ethnicity },
+                { label: 'Descriptor', value: data.womanDesc },
+                { label: 'Face Shape', value: data.faceShape },
+                { label: 'Cheeks & Jaw', value: data.cheeksJaw },
+                { label: 'Eyes', value: `her eyes are ${data.eyeColour} and ${data.eyeShape}` },
+                { label: 'Hair', value: data.hairColour + ' hair' },
+                { label: 'Nose / Lips', value: `${data.nose} • ${data.lips}` },
+                { label: 'Style', value: data.style },
+                { label: 'Pose', value: data.pose }
+            ];
 
+            if (data.bodyPart) {
+                items.push({ label: 'Body (NSFW)', value: data.bodyPart });
+            }
+
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'breakdown-item';
+                div.innerHTML = `
+                    <div class="breakdown-label">${item.label}</div>
+                    <div style="color:#e0e7ff;">${item.value}</div>
+                `;
+                grid.appendChild(div);
+            });
+
+            document.getElementById('breakdown-section').style.display = 'block';
+        }
+
+        function copyPrompt() {
+            const promptText = document.getElementById('prompt-output').innerText;
+            if (!promptText || promptText.includes('Click "Forge Prompt')) {
+                alert('Please generate a prompt first!');
+                return;
+            }
+
+            navigator.clipboard.writeText(promptText).then(() => {
+                const btns = document.querySelectorAll('.copy-btn');
+                btns.forEach(btn => {
+                    const original = btn.innerText;
+                    btn.innerText = '✅ Copied!';
+                    setTimeout(() => btn.innerText = original, 2000);
+                });
+            });
+        }
+
+        async function generateWithGrok() {
+            const promptText = document.getElementById('prompt-output').innerText;
+            if (!promptText || promptText.includes('Click "Forge Prompt')) return alert('Please generate a prompt first!');
+
+            const button = event.currentTarget;
+            const originalText = button.innerHTML;
+            button.innerHTML = '⏳ Generating...';
+            button.disabled = true;
+
+            try {
+                const res = await fetch('/api/generate-image', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: promptText, n: 2, aspect_ratio: "9:16" })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed');
+                displayImages(data.images, "Generated with Grok");
+            } catch (e) {
+                alert('Error: ' + e.message);
+            } finally {
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        }
+
+        async function generateWithChatGPT() {
+            const promptText = document.getElementById('prompt-output').innerText;
+            if (!promptText || promptText.includes('Click "Forge Prompt')) return alert('Please generate a prompt first!');
+
+            const button = event.currentTarget;
+            const originalText = button.innerHTML;
+            button.innerHTML = '⏳ Generating...';
+            button.disabled = true;
+
+            try {
+                const res = await fetch('/api/generate-image-chatgpt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: promptText, n: 2 })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed');
+                displayImages(data.images, "Generated with ChatGPT");
+            } catch (e) {
+                alert('Error: ' + e.message);
+            } finally {
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        }
+
+        function displayImages(images, title) {
+            const container = document.createElement('div');
+            container.className = 'generated-images';
+            container.style.marginTop = '20px';
+
+            let html = `<strong>${title}</strong><br>`;
+            images.forEach(url => {
+                html += `<img src="${url}" style="max-width:280px; border-radius:12px; margin:8px 8px 8px 0; border:1px solid #334155;">`;
+            });
+            container.innerHTML = html;
+
+            document.querySelectorAll('.generated-images').forEach(el => el.remove());
+            document.getElementById('image-generation-buttons').parentNode.appendChild(container);
+        }
+
+        window.onload = function() {
+            setMode('sfw');
+            setTimeout(() => generatePrompt(), 600);
+        };
+    </script>
 </body>
 </html>
