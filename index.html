@@ -158,6 +158,7 @@
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             margin-top: 12px;
+            margin-bottom: 10px;
             width: 100%;
             max-width: 320px;
         }
@@ -519,39 +520,45 @@
         }
 
         function displayImages(images, title) {
-            // Remove any previous image containers
-            document.querySelectorAll('.generated-images').forEach(el => el.remove());
+    // Remove any previous image containers
+    document.querySelectorAll('.generated-images').forEach(el => el.remove());
 
-            const container = document.createElement('div');
-            container.className = 'generated-images';
+    const container = document.createElement('div');
+    container.className = 'generated-images';
 
-            let html = `<strong style="display:block; margin-bottom:12px; color:#94a3b8;">${title}</strong>`;
+    let html = `<strong style="display:block; margin-bottom:12px; color:#94a3b8;">${title}</strong>`;
 
-            images.forEach((imgSrc, index) => {
-                // Handle both normal URLs and base64
-                let src = imgSrc;
-                if (typeof src === 'object' && src.url) src = src.url; // in case backend sends {url: "..."}
-                if (!src) return;
+    images.forEach((imgSrc, index) => {
+        if (!imgSrc) return; // ← Prevents the "null" error
 
-                html += `
-                    <div style="margin-bottom: 20px;">
-                        <img src="${src}" 
-                             style="width:100%; max-width:320px; border-radius:16px; border:1px solid #334155; display:block;"
-                             alt="Generated image ${index + 1}"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                        
-                        <div style="display:none; color:#f87171; font-size:0.85rem; margin-top:6px;">
-                            Failed to load this image
-                        </div>
-                        
-                        <div class="image-actions">
-                            <button onclick="downloadImage('${src}', ${index})" class="download-btn">
-                                ⬇️ Download
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
+        let src = imgSrc;
+        if (typeof src === 'object' && src.url) src = src.url;
+
+        html += `
+            <div style="margin-bottom: 20px;">
+                <img src="${src}" 
+                     style="width:100%; max-width:320px; border-radius:16px; border:1px solid #334155; display:block;"
+                     alt="Generated image ${index + 1}"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                
+                <div style="display:none; color:#f87171; font-size:0.85rem; margin-top:6px;">
+                    Failed to load this image
+                </div>
+                
+                <div class="image-actions">
+                    <button onclick="downloadImage('${src}', ${index})" class="download-btn">
+                        ⬇️ Download
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+
+    const buttonsContainer = document.getElementById('image-generation-buttons');
+    buttonsContainer.parentNode.appendChild(container);
+}
 
             container.innerHTML = html;
 
