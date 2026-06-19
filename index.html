@@ -473,46 +473,55 @@
         }
 
         async function generateImage(btn, endpoint, provider) {
-            const promptText = document.getElementById('prompt-output').innerText;
-            if (!promptText || promptText.includes('Click "Forge Prompt')) {
-                alert('Please generate a prompt first!');
-                return;
-            }
+    const promptText = document.getElementById('prompt-output').innerText;
+    if (!promptText || promptText.includes('Click "Forge Prompt')) {
+        alert('Please generate a prompt first!');
+        return;
+    }
 
-            const originalText = btn.innerHTML;
-            btn.innerHTML = `⏳ Generating with ${provider}...`;
-            btn.disabled = true;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = `⏳ Generating with ${provider}...`;
+    btn.disabled = true;
 
-            // Remove old images
-            document.querySelectorAll('.generated-images').forEach(el => el.remove());
+    // Remove old images
+    document.querySelectorAll('.generated-images').forEach(el => el.remove());
 
-            try {
-                const res = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: promptText, n: 2 })
-                });
+    try {
+        const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: promptText, n: 2 })
+        });
 
-                const data = await res.json();
+        const data = await res.json();
+        console.log(`${provider} Response:`, data); // Helpful for debugging
 
-                if (!res.ok) {
-                    throw new Error(data.error || `Failed to generate with ${provider}`);
-                }
-
-                if (!data.images || data.images.length === 0) {
-                    throw new Error('No images returned from the server');
-                }
-
-                displayImages(data.images, `Generated with ${provider}`);
-
-            } catch (e) {
-                console.error(`${provider} Error:`, e);
-                alert(`Error generating with ${provider}: ${e.message}`);
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
+        if (!res.ok) {
+            throw new Error(data.error || `Failed to generate with ${provider}`);
         }
+
+        // Handle both possible response formats
+        let images = [];
+        if (data.images && Array.isArray(data.images)) {
+            images = data.images;
+        } else if (data.data && Array.isArray(data.data)) {
+            images = data.data.map(item => item.url || item); // OpenAI format
+        }
+
+        if (images.length === 0) {
+            throw new Error('No images returned from the server');
+        }
+
+        displayImages(images, `Generated with ${provider}`);
+
+    } catch (e) {
+        console.error(`${provider} Error:`, e);
+        alert(`Error generating with ${provider}: ${e.message}`);
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+}
 
         function displayImages(images, title) {
             document.querySelectorAll('.generated-images').forEach(el => el.remove());
