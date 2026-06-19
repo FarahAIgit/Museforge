@@ -148,8 +148,7 @@
             box-shadow: 0 6px 12px -2px rgb(15 118 110 / 0.4);
         }
       
-        .grok-btn {
-            background: linear-gradient(90deg, #0f766e, #1e40af);
+        .grok-btn, .chatgpt-btn {
             color: white;
             border: none;
             padding: 14px 40px;
@@ -158,36 +157,23 @@
             border-radius: 9999px;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 10px 15px -3px rgb(15 118 110 / 0.4);
             margin-top: 12px;
             width: 100%;
             max-width: 320px;
         }
       
-        .grok-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 20px -3px rgb(15 118 110 / 0.5);
+        .grok-btn {
+            background: linear-gradient(90deg, #0f766e, #1e40af);
+            box-shadow: 0 10px 15px -3px rgb(15 118 110 / 0.4);
         }
       
         .chatgpt-btn {
             background: linear-gradient(90deg, #10a37f, #0d8a6a);
-            color: white;
-            border: none;
-            padding: 14px 40px;
-            font-size: 1.05rem;
-            font-weight: 600;
-            border-radius: 9999px;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
             box-shadow: 0 10px 15px -3px rgb(16 163 127 / 0.4);
-            margin-top: 12px;
-            width: 100%;
-            max-width: 320px;
         }
       
-        .chatgpt-btn:hover {
+        .grok-btn:hover, .chatgpt-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 20px -3px rgb(16 163 127 / 0.5);
         }
       
         .breakdown {
@@ -224,6 +210,34 @@
             margin-bottom: 4px;
         }
       
+        .generated-images {
+            margin-top: 24px;
+        }
+      
+        .generated-images img {
+            max-width: 100%;
+            border-radius: 16px;
+            border: 1px solid #334155;
+            margin-bottom: 12px;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+        }
+      
+        .image-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+      
+        .download-btn {
+            background: #334155;
+            color: #e0e7ff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+      
         footer {
             text-align: center;
             margin-top: 40px;
@@ -239,6 +253,11 @@
             padding: 2px 10px;
             border-radius: 9999px;
             margin-left: 8px;
+        }
+        
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
         }
     </style>
 </head>
@@ -281,7 +300,7 @@
                     📋 Copy to Clipboard
                 </button>
 
-                <!-- Both Buttons -->
+                <!-- Image Generation Buttons -->
                 <div id="image-generation-buttons" style="display: none; margin-top: 16px;">
                     <button id="grok-btn" onclick="generateWithGrok(this)" class="grok-btn">
                         🖼️ Generate with Grok
@@ -345,46 +364,46 @@
         }
 
         function generatePrompt() {
-    const photoPool = currentMode === 'sfw' ? pools.sfw_photo : pools.nsfw_photo;
-    const stylePool = currentMode === 'sfw' ? pools.sfw_style : pools.nsfw_style;
-    const posePool = currentMode === 'sfw' ? pools.sfw_pose : pools.nsfw_pose;
+            const photoPool = currentMode === 'sfw' ? pools.sfw_photo : pools.nsfw_photo;
+            const stylePool = currentMode === 'sfw' ? pools.sfw_style : pools.nsfw_style;
+            const posePool = currentMode === 'sfw' ? pools.sfw_pose : pools.nsfw_pose;
 
-    const photo = `amateur ${getRandom(photoPool)}`;
-    const ethnicity = getRandom(pools.ethnicity);
-    const womanDesc = getRandom(pools.woman_desc);
+            const photo = `amateur ${getRandom(photoPool)}`;
+            const ethnicity = getRandom(pools.ethnicity);
+            const womanDesc = getRandom(pools.woman_desc);
 
-    const faceShape = getRandom(pools.face_shape);
-    const eyeColour = getRandom(pools.eye_colour);
-    const eyeShape = getRandom(pools.eye_shape);
-    const nose = getRandom(pools.nose);
-    const lips = getRandom(pools.lips);
-    const cheeksJaw = getRandom(pools.cheeks_jaw);
-    const extra = getRandom(pools.additional_face);
-    const hairColour = getRandom(pools.hair_colour);
+            const faceShape = getRandom(pools.face_shape);
+            const eyeColour = getRandom(pools.eye_colour);
+            const eyeShape = getRandom(pools.eye_shape);
+            const nose = getRandom(pools.nose);
+            const lips = getRandom(pools.lips);
+            const cheeksJaw = getRandom(pools.cheeks_jaw);
+            const extra = getRandom(pools.additional_face);
+            const hairColour = getRandom(pools.hair_colour);
 
-    let faceDesc = `${faceShape}, ${cheeksJaw}, ${nose}, ${lips}, ${extra}, her eyes are ${eyeColour} and ${eyeShape}, ${hairColour} hair`;
+            let faceDesc = `${faceShape}, ${cheeksJaw}, ${nose}, ${lips}, ${extra}, her eyes are ${eyeColour} and ${eyeShape}, ${hairColour} hair`;
 
-    let bodyPart = '';
-    if (currentMode === 'nsfw') {
-        const bodyType = getRandom(pools.body_type);
-        const breasts = getRandom(pools.breasts);
-        const lowerBody = getRandom(pools.lower_body);
-        bodyPart = `, ${bodyType} with ${breasts} and ${lowerBody}`;
-    }
+            let bodyPart = '';
+            if (currentMode === 'nsfw') {
+                const bodyType = getRandom(pools.body_type);
+                const breasts = getRandom(pools.breasts);
+                const lowerBody = getRandom(pools.lower_body);
+                bodyPart = `, ${bodyType} with ${breasts} and ${lowerBody}`;
+            }
 
-    const style = getRandom(stylePool);
-    const pose = getRandom(posePool);
+            const style = getRandom(stylePool);
+            const pose = getRandom(posePool);
 
-    const prompt = `${photo} of a ${ethnicity} ${womanDesc} woman with ${faceDesc} ${bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture`;
+            const prompt = `${photo} of a ${ethnicity} ${womanDesc} woman with ${faceDesc} ${bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture`;
 
-    document.getElementById('prompt-output').innerHTML = prompt;
-    document.getElementById('mode-badge').textContent = currentMode.toUpperCase();
+            document.getElementById('prompt-output').textContent = prompt;
+            document.getElementById('mode-badge').textContent = currentMode.toUpperCase();
 
-    showBreakdown({
-        photo, ethnicity, womanDesc, faceShape, eyeColour, eyeShape,
-        nose, lips, cheeksJaw, hairColour, style, pose, bodyPart
-    });
-}
+            showBreakdown({
+                photo, ethnicity, womanDesc, faceShape, eyeColour, eyeShape,
+                nose, lips, cheeksJaw, hairColour, style, pose, bodyPart
+            });
+        }
 
         function showBreakdown(data) {
             const grid = document.getElementById('breakdown-grid');
@@ -404,7 +423,8 @@
             ];
 
             if (data.bodyPart) {
-                items.push({ label: 'Body (NSFW)', value: data.bodyPart });
+                const cleanBody = data.bodyPart.replace(/^,\s*/, '');
+                items.push({ label: 'Body (NSFW)', value: cleanBody });
             }
 
             items.forEach(item => {
@@ -432,75 +452,124 @@
                 const original = btn.innerText;
                 btn.innerText = '✅ Copied!';
                 setTimeout(() => btn.innerText = original, 2000);
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = promptText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Prompt copied!');
             });
         }
 
-        // Fixed generateWithGrok
+        // ==================== IMPROVED IMAGE GENERATION ====================
+
         async function generateWithGrok(btn) {
-            const promptText = document.getElementById('prompt-output').innerText;
-            if (!promptText || promptText.includes('Click "Forge Prompt')) return alert('Please generate a prompt first!');
-
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '⏳ Generating...';
-            btn.disabled = true;
-
-            try {
-                const res = await fetch('/api/generate-image', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: promptText, n: 2, aspect_ratio: "9:16" })
-                });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error || 'Failed');
-                displayImages(data.images, "Generated with Grok");
-            } catch (e) {
-                alert('Error: ' + e.message);
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
+            await generateImage(btn, '/api/generate-image', 'Grok');
         }
 
-        // Fixed generateWithChatGPT
         async function generateWithChatGPT(btn) {
+            await generateImage(btn, '/api/generate-image-chatgpt', 'ChatGPT');
+        }
+
+        async function generateImage(btn, endpoint, provider) {
             const promptText = document.getElementById('prompt-output').innerText;
-            if (!promptText || promptText.includes('Click "Forge Prompt')) return alert('Please generate a prompt first!');
+            if (!promptText || promptText.includes('Click "Forge Prompt')) {
+                alert('Please generate a prompt first!');
+                return;
+            }
 
             const originalText = btn.innerHTML;
-            btn.innerHTML = '⏳ Generating...';
+            btn.innerHTML = `⏳ Generating with ${provider}...`;
             btn.disabled = true;
+            btn.classList.add('loading');
+
+            // Remove old images
+            document.querySelectorAll('.generated-images').forEach(el => el.remove());
 
             try {
-                const res = await fetch('/api/generate-image-chatgpt', {
+                const res = await fetch(endpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: promptText, n: 2 })
                 });
+
                 const data = await res.json();
-                if (!res.ok) throw new Error(data.error || 'Failed');
-                displayImages(data.images, "Generated with ChatGPT");
+                console.log(`${provider} API Response:`, data); // ← Useful for debugging
+
+                if (!res.ok) {
+                    throw new Error(data.error || `Failed to generate with ${provider}`);
+                }
+
+                if (!data.images || data.images.length === 0) {
+                    throw new Error('No images returned from the server');
+                }
+
+                displayImages(data.images, `Generated with ${provider}`);
+
             } catch (e) {
-                alert('Error: ' + e.message);
+                console.error(`${provider} Error:`, e);
+                alert(`Error generating with ${provider}: ${e.message}`);
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
+                btn.classList.remove('loading');
             }
         }
 
         function displayImages(images, title) {
+            // Remove any previous image containers
+            document.querySelectorAll('.generated-images').forEach(el => el.remove());
+
             const container = document.createElement('div');
             container.className = 'generated-images';
-            container.style.marginTop = '20px';
 
-            let html = `<strong>${title}</strong><br>`;
-            images.forEach(url => {
-                html += `<img src="${url}" style="max-width:280px; border-radius:12px; margin:8px 8px 8px 0; border:1px solid #334155;">`;
+            let html = `<strong style="display:block; margin-bottom:12px; color:#94a3b8;">${title}</strong>`;
+
+            images.forEach((imgSrc, index) => {
+                // Handle both normal URLs and base64
+                let src = imgSrc;
+                if (typeof src === 'object' && src.url) src = src.url; // in case backend sends {url: "..."}
+                if (!src) return;
+
+                html += `
+                    <div style="margin-bottom: 20px;">
+                        <img src="${src}" 
+                             style="width:100%; max-width:320px; border-radius:16px; border:1px solid #334155; display:block;"
+                             alt="Generated image ${index + 1}"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        
+                        <div style="display:none; color:#f87171; font-size:0.85rem; margin-top:6px;">
+                            Failed to load this image
+                        </div>
+                        
+                        <div class="image-actions">
+                            <button onclick="downloadImage('${src}', ${index})" class="download-btn">
+                                ⬇️ Download
+                            </button>
+                        </div>
+                    </div>
+                `;
             });
+
             container.innerHTML = html;
 
-            document.querySelectorAll('.generated-images').forEach(el => el.remove());
-            document.getElementById('image-generation-buttons').parentNode.appendChild(container);
+            // Append after the image generation buttons
+            const buttonsContainer = document.getElementById('image-generation-buttons');
+            buttonsContainer.parentNode.appendChild(container);
         }
+
+        function downloadImage(src, index) {
+            const link = document.createElement('a');
+            link.href = src;
+            link.download = `muse-forge-\( {Date.now()}- \){index + 1}.jpg`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // ==================== END IMPROVED SECTION ====================
 
         window.onload = function() {
             setMode('sfw');
