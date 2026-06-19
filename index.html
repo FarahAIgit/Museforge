@@ -346,45 +346,45 @@
 
         // ==================== WORKING generatePrompt() ====================
         function generatePrompt() {
-            const photoPool = currentMode === 'sfw' ? pools.sfw_photo : pools.nsfw_photo;
-            const stylePool = currentMode === 'sfw' ? pools.sfw_style : pools.nsfw_style;
-            const posePool = currentMode === 'sfw' ? pools.sfw_pose : pools.nsfw_pose;
+    const photoPool = currentMode === 'sfw' ? pools.sfw_photo : pools.nsfw_photo;
+    const stylePool = currentMode === 'sfw' ? pools.sfw_style : pools.nsfw_style;
+    const posePool = currentMode === 'sfw' ? pools.sfw_pose : pools.nsfw_pose;
 
-            const photo = `amateur ${getRandom(photoPool)}`;
-            const ethnicity = getRandom(pools.ethnicity);
-            const womanDesc = getRandom(pools.woman_desc);
+    const photo = `amateur ${getRandom(photoPool)}`;
+    const ethnicity = getRandom(pools.ethnicity);
+    const womanDesc = getRandom(pools.woman_desc);
 
-            const faceShape = getRandom(pools.face_shape);
-            const eyeColour = getRandom(pools.eye_colour);
-            const eyeShape = getRandom(pools.eye_shape);
-            const nose = getRandom(pools.nose);
-            const lips = getRandom(pools.lips);
-            const cheeksJaw = getRandom(pools.cheeks_jaw);
-            const extra = getRandom(pools.additional_face);
-            const hairColour = getRandom(pools.hair_colour);
+    const faceShape = getRandom(pools.face_shape);
+    const eyeColour = getRandom(pools.eye_colour);
+    const eyeShape = getRandom(pools.eye_shape);
+    const nose = getRandom(pools.nose);
+    const lips = getRandom(pools.lips);
+    const cheeksJaw = getRandom(pools.cheeks_jaw);
+    const extra = getRandom(pools.additional_face);
+    const hairColour = getRandom(pools.hair_colour);
 
-            let faceDesc = `${faceShape}, ${cheeksJaw}, ${nose}, ${lips}, ${extra}, her eyes are ${eyeColour} and ${eyeShape}, ${hairColour} hair`;
+    let faceDesc = `${faceShape}, ${cheeksJaw}, ${nose}, ${lips}, ${extra}, her eyes are ${eyeColour} and ${eyeShape}, ${hairColour} hair`;
 
-            let bodyPart = '';
-            if (currentMode === 'nsfw') {
-                const bodyType = getRandom(pools.body_type);
-                const breasts = getRandom(pools.breasts);
-                const lowerBody = getRandom(pools.lower_body);
-                bodyPart = `, ${bodyType} with ${breasts} and ${lowerBody}`;
-            }
+    let bodyPart = '';
+    if (currentMode === 'nsfw') {
+        const bodyType = getRandom(pools.body_type);
+        const breasts = getRandom(pools.breasts);
+        const lowerBody = getRandom(pools.lower_body);
+        bodyPart = `, ${bodyType} with ${breasts} and ${lowerBody}`;
+    }
 
-            const style = getRandom(stylePool);
-            const pose = getRandom(posePool);
+    const style = getRandom(stylePool);
+    const pose = getRandom(posePool);
 
-            const prompt = `${photo} of a ${ethnicity} ${womanDesc} woman with \( {faceDesc} \){bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture`;
+    const prompt = `${photo} of a ${ethnicity} ${womanDesc} woman with \( {faceDesc} \){bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture`;
 
-            document.getElementById('prompt-output').innerHTML = prompt;
-            document.getElementById('mode-badge').textContent = currentMode.toUpperCase();
+    document.getElementById('prompt-output').innerHTML = prompt;
+    document.getElementById('mode-badge').textContent = currentMode.toUpperCase();
 
-            showBreakdown({
-                photo, ethnicity, womanDesc, faceShape, eyeColour, eyeShape,
-                nose, lips, cheeksJaw, hairColour, style, pose, bodyPart
-            });
+    showBreakdown({
+        photo, ethnicity, womanDesc, faceShape, eyeColour, eyeShape,
+        nose, lips, cheeksJaw, hairColour, style, pose, bodyPart
+    });
         }
 
         function showBreakdown(data) {
