@@ -561,13 +561,57 @@
         }
 
         // New function for the Grok button (placeholder for now)
-        function generateWithGrok() {
-            const promptText = document.getElementById('prompt-output').innerText;
-            
-            if (!promptText || promptText.includes('Click "Forge Prompt')) {
-                alert('Please generate a prompt first!');
-                return;
-            }
+async function generateWithGrok() {
+    const promptText = document.getElementById('prompt-output').innerText;
+
+    if (!promptText || promptText.includes('Click "Forge Prompt')) {
+        alert('Please generate a prompt first!');
+        return;
+    }
+
+    const button = document.getElementById('grok-btn');
+    const originalText = button.innerHTML;
+    button.innerHTML = '⏳ Generating...';
+    button.disabled = true;
+
+    try {
+        const response = await fetch('/api/generate-image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                prompt: promptText,
+                n: 2,                    // Number of images
+                aspect_ratio: "9:16"     // You can change this
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to generate image');
+        }
+
+        // Show images in a simple way (you can improve this later)
+        let html = '<div style="margin-top: 20px;"><h4>Generated Images:</h4>';
+        data.images.forEach(url => {
+            html += `<img src="${url}" style="max-width: 300px; border-radius: 12px; margin: 10px; border: 1px solid #334155;">`;
+        });
+        html += '</div>';
+
+        // Add images below the button
+        const container = document.createElement('div');
+        container.innerHTML = html;
+        button.parentNode.appendChild(container);
+
+    } catch (error) {
+        alert('Error: ' + error.message);
+    } finally {
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }
+}
 
             alert("This will call the Grok Imagine API (backend not connected yet).\n\nPrompt that would be sent:\n\n" + promptText);
             
