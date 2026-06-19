@@ -159,7 +159,7 @@
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             box-shadow: 0 10px 15px -3px rgb(15 118 110 / 0.4);
-            margin-top: 16px;
+            margin-top: 12px;
             width: 100%;
             max-width: 320px;
         }
@@ -167,6 +167,27 @@
         .grok-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 15px 20px -3px rgb(15 118 110 / 0.5);
+        }
+      
+        .chatgpt-btn {
+            background: linear-gradient(90deg, #10a37f, #0d8a6a);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 15px -3px rgb(16 163 127 / 0.4);
+            margin-top: 12px;
+            width: 100%;
+            max-width: 320px;
+        }
+      
+        .chatgpt-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -3px rgb(16 163 127 / 0.5);
         }
       
         .breakdown {
@@ -260,10 +281,16 @@
                     📋 Copy to Clipboard
                 </button>
 
-                <!-- Generate with Grok Button -->
-                <button id="grok-btn" onclick="generateWithGrok()" class="grok-btn" style="display: none;">
-                    🖼️ Generate with Grok
-                </button>
+                <!-- Both Generate Buttons (SFW only) -->
+                <div id="image-generation-buttons" style="display: none; margin-top: 16px;">
+                    <button onclick="generateWithGrok()" class="grok-btn">
+                        🖼️ Generate with Grok
+                    </button>
+                    
+                    <button onclick="generateWithChatGPT()" class="chatgpt-btn">
+                        🖼️ Generate with ChatGPT
+                    </button>
+                </div>
             </div>
 
             <!-- Breakdown -->
@@ -317,9 +344,9 @@
             document.getElementById('nsfw-btn').classList.toggle('active', mode === 'nsfw');
             document.getElementById('mode-badge').textContent = mode.toUpperCase();
 
-            // Show/hide Grok button only in SFW mode
-            const grokBtn = document.getElementById('grok-btn');
-            grokBtn.style.display = (mode === 'sfw') ? 'block' : 'none';
+            // Show/hide image generation buttons only in SFW mode
+            const imageButtons = document.getElementById('image-generation-buttons');
+            imageButtons.style.display = (mode === 'sfw') ? 'block' : 'none';
         }
 
         function getRandom(arr) {
@@ -357,7 +384,7 @@
             const style = getRandom(stylePool);
             const pose = getRandom(posePool);
 
-            const prompt = `${photo} of a ${ethnicity} ${womanDesc} woman with ${faceDesc}${bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture`;
+            const prompt = `${photo} of a ${ethnicity} ${womanDesc} woman with \( {faceDesc} \){bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture`;
 
             document.getElementById('prompt-output').innerHTML = prompt;
             document.getElementById('mode-badge').textContent = currentMode.toUpperCase();
@@ -419,6 +446,7 @@
             });
         }
 
+        // Generate with Grok
         async function generateWithGrok() {
             const promptText = document.getElementById('prompt-output').innerText;
 
@@ -427,12 +455,15 @@
                 return;
             }
 
-            const button = document.getElementById('grok-btn');
-            const originalText = button.innerHTML;
-            button.innerHTML = '⏳ Generating...';
-            button.disabled = true;
+            const button = event.currentTarget;
+            const originalText = button ? button.innerHTML : '🖼️ Generate with Grok';
 
             try {
+                if (button) {
+                    button.innerHTML = '⏳ Generating...';
+                    button.disabled = true;
+                }
+
                 const response = await fetch('/api/generate-image', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -449,28 +480,80 @@
                     throw new Error(data.error || 'Failed to generate image');
                 }
 
-                // Display images
-                let html = `<div style="margin-top:20px;"><strong>Generated Images:</strong><br>`;
-                data.images.forEach(url => {
-                    html += `<img src="${url}" style="max-width:280px; border-radius:12px; margin:10px 10px 10px 0; border:1px solid #334155;">`;
-                });
-                html += `</div>`;
-
-                const container = document.createElement('div');
-                container.innerHTML = html;
-
-                // Remove old images
-                const oldImages = button.parentNode.querySelector('div[style*="margin-top:20px"]');
-                if (oldImages) oldImages.remove();
-
-                button.parentNode.appendChild(container);
+                displayGeneratedImages(data.images, "Generated with Grok");
 
             } catch (error) {
                 alert('Error: ' + error.message);
             } finally {
-                button.innerHTML = originalText;
-                button.disabled = false;
+                if (button) {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
             }
+        }
+
+        // Generate with ChatGPT (NEW)
+        async function generateWithChatGPT() {
+            const promptText = document.getElementById('prompt-output').innerText;
+
+            if (!promptText || promptText.includes('Click "Forge Prompt')) {
+                alert('Please generate a prompt first!');
+                return;
+            }
+
+            const button = event.currentTarget;
+            const originalText = button ? button.innerHTML : '🖼️ Generate with ChatGPT';
+
+            try {
+                if (button) {
+                    button.innerHTML = '⏳ Generating...';
+                    button.disabled = true;
+                }
+
+                const response = await fetch('/api/generate-image-chatgpt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prompt: promptText,
+                        n: 2
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to generate image');
+                }
+
+                displayGeneratedImages(data.images, "Generated with ChatGPT");
+
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                if (button) {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            }
+        }
+
+        // Helper function to display images
+        function displayGeneratedImages(images, title) {
+            let html = `<div style="margin-top:20px;"><strong>${title}:</strong><br>`;
+            images.forEach(url => {
+                html += `<img src="${url}" style="max-width:280px; border-radius:12px; margin:10px 10px 10px 0; border:1px solid #334155;">`;
+            });
+            html += `</div>`;
+
+            const container = document.createElement('div');
+            container.innerHTML = html;
+
+            // Remove previous image containers
+            const oldImages = document.querySelectorAll('.generated-images');
+            oldImages.forEach(el => el.remove());
+
+            container.classList.add('generated-images');
+            document.getElementById('image-generation-buttons').parentNode.appendChild(container);
         }
 
         window.onload = function() {
