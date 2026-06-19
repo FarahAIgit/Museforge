@@ -469,15 +469,18 @@
         }
 
         async function generateWithChatGPT(btn) {
-            await generateImage(btn, '/api/generate-image-chatgpt', 'ChatGPT');
-        }
+    console.log("ChatGPT button clicked!");   // ← Add this line
 
-        async function generateImage(btn, endpoint, provider) {
     const promptText = document.getElementById('prompt-output').innerText;
     if (!promptText || promptText.includes('Click "Forge Prompt')) {
         alert('Please generate a prompt first!');
         return;
     }
+
+    console.log("Calling generateImage for ChatGPT..."); // ← Add this line too
+
+    await generateImage(btn, '/api/generate-image-chatgpt', 'ChatGPT');
+}
 
     const originalText = btn.innerHTML;
     btn.innerHTML = `⏳ Generating with ${provider}...`;
