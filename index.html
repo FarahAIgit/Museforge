@@ -561,6 +561,7 @@
         }
 
         // New function for the Grok button (placeholder for now)
+// Replace your current generateWithGrok() function with this one:
 async function generateWithGrok() {
     const promptText = document.getElementById('prompt-output').innerText;
 
@@ -571,6 +572,7 @@ async function generateWithGrok() {
 
     const button = document.getElementById('grok-btn');
     const originalText = button.innerHTML;
+
     button.innerHTML = '⏳ Generating...';
     button.disabled = true;
 
@@ -582,8 +584,8 @@ async function generateWithGrok() {
             },
             body: JSON.stringify({
                 prompt: promptText,
-                n: 2,                    // Number of images
-                aspect_ratio: "9:16"     // You can change this
+                n: 2,
+                aspect_ratio: "9:16"
             })
         });
 
@@ -592,6 +594,30 @@ async function generateWithGrok() {
         if (!response.ok) {
             throw new Error(data.error || 'Failed to generate image');
         }
+
+        // Display images
+        let html = `<div style="margin-top:20px;"><strong>Generated Images:</strong><br>`;
+        data.images.forEach(url => {
+            html += `<img src="${url}" style="max-width:280px; border-radius:12px; margin:10px 10px 10px 0; border:1px solid #334155;">`;
+        });
+        html += `</div>`;
+
+        const container = document.createElement('div');
+        container.innerHTML = html;
+
+        // Remove old images if they exist
+        const oldImages = button.parentNode.querySelector('div[style*="margin-top:20px"]');
+        if (oldImages) oldImages.remove();
+
+        button.parentNode.appendChild(container);
+
+    } catch (error) {
+        alert('Error generating image: ' + error.message);
+    } finally {
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }
+}
 
         // Show images in a simple way (you can improve this later)
         let html = '<div style="margin-top: 20px;"><h4>Generated Images:</h4>';
