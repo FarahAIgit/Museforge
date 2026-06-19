@@ -130,22 +130,22 @@
         }
       
         .copy-btn {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            background: #334155;
-            color: #cbd5e1;
+            background: linear-gradient(90deg, #0f766e, #1e40af);
+            color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.8rem;
+            padding: 10px 20px;
+            border-radius: 9999px;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgb(15 118 110 / 0.3);
+            margin-top: 12px;
         }
       
         .copy-btn:hover {
-            background: #475569;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px -2px rgb(15 118 110 / 0.4);
         }
       
         .grok-btn {
@@ -283,11 +283,11 @@
 
                 <!-- Both Buttons -->
                 <div id="image-generation-buttons" style="display: none; margin-top: 16px;">
-                    <button onclick="generateWithGrok()" class="grok-btn">
+                    <button id="grok-btn" onclick="generateWithGrok(this)" class="grok-btn">
                         🖼️ Generate with Grok
                     </button>
                     
-                    <button onclick="generateWithChatGPT()" class="chatgpt-btn">
+                    <button id="chatgpt-btn" onclick="generateWithChatGPT(this)" class="chatgpt-btn">
                         🖼️ Generate with ChatGPT
                     </button>
                 </div>
@@ -428,23 +428,21 @@
             }
 
             navigator.clipboard.writeText(promptText).then(() => {
-                const btns = document.querySelectorAll('.copy-btn');
-                btns.forEach(btn => {
-                    const original = btn.innerText;
-                    btn.innerText = '✅ Copied!';
-                    setTimeout(() => btn.innerText = original, 2000);
-                });
+                const btn = document.querySelector('.copy-btn');
+                const original = btn.innerText;
+                btn.innerText = '✅ Copied!';
+                setTimeout(() => btn.innerText = original, 2000);
             });
         }
 
-        async function generateWithGrok() {
+        // Fixed generateWithGrok
+        async function generateWithGrok(btn) {
             const promptText = document.getElementById('prompt-output').innerText;
             if (!promptText || promptText.includes('Click "Forge Prompt')) return alert('Please generate a prompt first!');
 
-            const button = event.currentTarget;
-            const originalText = button.innerHTML;
-            button.innerHTML = '⏳ Generating...';
-            button.disabled = true;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '⏳ Generating...';
+            btn.disabled = true;
 
             try {
                 const res = await fetch('/api/generate-image', {
@@ -458,19 +456,19 @@
             } catch (e) {
                 alert('Error: ' + e.message);
             } finally {
-                button.innerHTML = originalText;
-                button.disabled = false;
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             }
         }
 
-        async function generateWithChatGPT() {
+        // Fixed generateWithChatGPT
+        async function generateWithChatGPT(btn) {
             const promptText = document.getElementById('prompt-output').innerText;
             if (!promptText || promptText.includes('Click "Forge Prompt')) return alert('Please generate a prompt first!');
 
-            const button = event.currentTarget;
-            const originalText = button.innerHTML;
-            button.innerHTML = '⏳ Generating...';
-            button.disabled = true;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '⏳ Generating...';
+            btn.disabled = true;
 
             try {
                 const res = await fetch('/api/generate-image-chatgpt', {
@@ -484,8 +482,8 @@
             } catch (e) {
                 alert('Error: ' + e.message);
             } finally {
-                button.innerHTML = originalText;
-                button.disabled = false;
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             }
         }
 
