@@ -6,51 +6,53 @@
     <title>Muse Forge AI</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
-       
+      
         :root {
             --primary: #18392b;
         }
-       
+      
         body {
-    font-family: 'Inter', system_ui, sans-serif;
-    background: linear-gradient(135deg, #0a1f1c 0%, #0f172a 100%);   /* ← Changed here */
-    color: #e2e8f0;
-    margin: 0;
-    padding: 40px 20px;
-    line-height: 1.6;
-}
-       
+            font-family: 'Inter', system_ui, sans-serif;
+            background: linear-gradient(135deg, #0a1f1c 0%, #0f172a 100%);
+            color: #e2e8f0;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+      
         .container {
             max-width: 900px;
             margin: 0 auto;
         }
-       
+      
         header {
             text-align: center;
             margin-bottom: 40px;
         }
-       
+      
         h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 2.8rem;
-    font-weight: 600;
-    background: linear-gradient(90deg, #0f766e, #1e40af);   /* Dark green + blue */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 0 0 8px 0;
-}
-       
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, #0f766e, #1e40af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 8px 0;
+        }
+      
         .subtitle {
             color: #94a3b8;
             font-size: 1.1rem;
         }
-       
+      
         .card {
-    background: #1a2332;   /* Slightly darker with green undertone */
-    border-radius: 20px;
-    ...
-}
-       
+            background: #1a2332;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            border: 1px solid #334155;
+        }
+      
         .controls {
             display: flex;
             gap: 16px;
@@ -58,7 +60,7 @@
             margin-bottom: 24px;
             flex-wrap: wrap;
         }
-       
+      
         .mode-toggle {
             display: flex;
             background: #0f172a;
@@ -66,7 +68,7 @@
             padding: 4px;
             border: 1px solid #334155;
         }
-       
+      
         .mode-btn {
             padding: 10px 24px;
             border: none;
@@ -77,15 +79,15 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-       
+      
         .mode-btn.active {
             background: #4f46e5;
             color: white;
             box-shadow: 0 4px 6px -1px rgb(99 102 241 / 0.3);
         }
-       
+      
         .generate-btn {
-            background: linear-gradient(90deg, #6366f1, #a855f7);
+            background: linear-gradient(90deg, #0f766e, #1e40af);
             color: white;
             border: none;
             padding: 14px 40px;
@@ -94,18 +96,18 @@
             border-radius: 9999px;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 10px 15px -3px rgb(99 102 241 / 0.4);
+            box-shadow: 0 10px 15px -3px rgb(15 118 110 / 0.4);
         }
-       
+      
         .generate-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 20px -3px rgb(99 102 241 / 0.5);
+            box-shadow: 0 15px 20px -3px rgb(15 118 110 / 0.5);
         }
-       
+      
         .output-container {
             margin-top: 24px;
         }
-       
+      
         .output-label {
             font-size: 0.875rem;
             font-weight: 600;
@@ -115,7 +117,7 @@
             align-items: center;
             gap: 8px;
         }
-       
+      
         .prompt-box {
             background: #0f172a;
             border: 2px solid #334155;
@@ -130,7 +132,7 @@
             min-height: 140px;
             position: relative;
         }
-       
+      
         .copy-btn {
             position: absolute;
             top: 16px;
@@ -145,11 +147,11 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-       
+      
         .copy-btn:hover {
             background: #475569;
         }
-       
+      
         .breakdown {
             margin-top: 24px;
             background: #0f172a;
@@ -157,40 +159,40 @@
             padding: 20px;
             border: 1px solid #334155;
         }
-       
+      
         .breakdown h4 {
             margin: 0 0 12px 0;
             color: #64748b;
             font-size: 0.9rem;
         }
-       
+      
         .breakdown-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 12px;
         }
-       
+      
         .breakdown-item {
             background: #1e2937;
             padding: 12px 16px;
             border-radius: 10px;
             font-size: 0.875rem;
         }
-       
+      
         .breakdown-label {
             font-size: 0.75rem;
             color: #64748b;
             font-weight: 600;
             margin-bottom: 4px;
         }
-       
+      
         footer {
             text-align: center;
             margin-top: 40px;
             color: #64748b;
             font-size: 0.85rem;
         }
-       
+      
         .badge {
             display: inline-block;
             background: #334155;
@@ -199,6 +201,27 @@
             padding: 2px 10px;
             border-radius: 9999px;
             margin-left: 8px;
+        }
+      
+        .grok-btn {
+            background: linear-gradient(90deg, #0f766e, #1e40af);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 15px -3px rgb(15 118 110 / 0.4);
+            margin-top: 16px;
+            width: 100%;
+            max-width: 300px;
+        }
+      
+        .grok-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -3px rgb(15 118 110 / 0.5);
         }
     </style>
 </head>
@@ -215,11 +238,11 @@
                     <button id="sfw-btn" class="mode-btn active" onclick="setMode('sfw')">SFW</button>
                     <button id="nsfw-btn" class="mode-btn" onclick="setMode('nsfw')">NSFW</button>
                 </div>
-               
+              
                 <button onclick="generatePrompt()" class="generate-btn">
                     ✨ Forge Prompt
                 </button>
-               
+              
                 <button onclick="generatePrompt(true)" style="background:#334155; color:#cbd5e1; border:none; padding:14px 24px; border-radius:9999px; font-weight:600; cursor:pointer;">
                     Regenerate
                 </button>
@@ -230,13 +253,18 @@
                     <span>Generated Prompt</span>
                     <span class="badge" id="mode-badge">SFW</span>
                 </div>
-               
+              
                 <div class="prompt-box" id="prompt-output">
                     Click "Forge Prompt" to create a new prompt...
                 </div>
-               
+              
                 <button onclick="copyPrompt()" class="copy-btn" style="position:relative; top:0; right:0; margin-top:12px;">
                     📋 Copy to Clipboard
+                </button>
+
+                <!-- NEW: Generate with Grok button (only shows in SFW mode) -->
+                <button id="grok-btn" onclick="generateWithGrok()" class="grok-btn" style="display: none;">
+                    🖼️ Generate with Grok
                 </button>
             </div>
             <!-- Breakdown -->
@@ -417,6 +445,12 @@
             document.getElementById('sfw-btn').classList.toggle('active', mode === 'sfw');
             document.getElementById('nsfw-btn').classList.toggle('active', mode === 'nsfw');
             document.getElementById('mode-badge').textContent = mode.toUpperCase();
+
+            // Show/hide Grok button based on mode
+            const grokBtn = document.getElementById('grok-btn');
+            if (grokBtn) {
+                grokBtn.style.display = (mode === 'sfw') ? 'block' : 'none';
+            }
         }
 
         function getRandom(arr) {
@@ -505,7 +539,7 @@
                 alert('Please generate a prompt first!');
                 return;
             }
-           
+          
             navigator.clipboard.writeText(promptText).then(() => {
                 const btns = document.querySelectorAll('.copy-btn');
                 btns.forEach(btn => {
@@ -524,6 +558,21 @@
                 document.body.removeChild(textArea);
                 alert('Prompt copied to clipboard!');
             });
+        }
+
+        // New function for the Grok button (placeholder for now)
+        function generateWithGrok() {
+            const promptText = document.getElementById('prompt-output').innerText;
+            
+            if (!promptText || promptText.includes('Click "Forge Prompt')) {
+                alert('Please generate a prompt first!');
+                return;
+            }
+
+            alert("This will call the Grok Imagine API (backend not connected yet).\n\nPrompt that would be sent:\n\n" + promptText);
+            
+            // Later you can replace this with a real API call
+            // Example: fetch('/api/generate-image', { method: 'POST', body: JSON.stringify({ prompt: promptText }) })
         }
 
         window.onload = function() {
