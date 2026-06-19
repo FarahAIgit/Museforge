@@ -463,7 +463,7 @@
             });
         }
 
-        // ==================== CLEAN IMAGE GENERATION ====================
+        // ==================== IMAGE GENERATION ====================
         async function generateWithGrok(btn) {
             await generateImage(btn, '/api/generate-image', 'Grok');
         }
@@ -499,13 +499,8 @@
                     throw new Error(data.error || `Failed to generate with ${provider}`);
                 }
 
-                let images = [];
-                if (data.images && Array.isArray(data.images)) {
-                    images = data.images;
-                } else if (data.data && Array.isArray(data.data)) {
-                    images = data.data.map(item => item.url || item);
-                }
-
+                let images = data.images || [];
+                
                 if (images.length === 0) {
                     throw new Error('No images returned from the server');
                 }
@@ -522,45 +517,32 @@
         }
 
         function displayImages(images, title) {
-    console.log("Images received in displayImages:", images); // ← Add this
+            document.querySelectorAll('.generated-images').forEach(el => el.remove());
 
-    document.querySelectorAll('.generated-images').forEach(el => el.remove());
+            const container = document.createElement('div');
+            container.className = 'generated-images';
 
-    const container = document.createElement('div');
-    container.className = 'generated-images';
+            let html = `<strong style="display:block; margin-bottom:12px; color:#94a3b8;">${title}</strong>`;
 
-    let html = `<strong style="display:block; margin-bottom:12px; color:#94a3b8;">${title}</strong>`;
+            images.forEach((imgSrc, index) => {
+                if (!imgSrc) return;
 
-    images.forEach((imgSrc, index) => {
-        console.log(`Image ${index}:`, imgSrc); // ← Add this too
+                const src = (typeof imgSrc === 'object' && imgSrc.url) ? imgSrc.url : imgSrc;
 
-        if (!imgSrc) {
-            console.warn(`Image ${index} is empty/null`);
-            return;
-        }
-
-        let src = imgSrc;
-        if (typeof src === 'object' && src.url) src = src.url;
-
-        html += `
-            <div style="margin-bottom: 20px;">
-                <img src="${src}" 
-                     style="width:100%; max-width:320px; border-radius:16px; border:1px solid #334155; display:block;"
-                     alt="Generated image ${index + 1}">
-                
-                <div class="image-actions">
-                    <button onclick="downloadImage('${src}', ${index})" class="download-btn">
-                        ⬇️ Download
-                    </button>
-                </div>
-            </div>
-        `;
-    });
-
-    container.innerHTML = html;
-    const buttonsContainer = document.getElementById('image-generation-buttons');
-    buttonsContainer.parentNode.appendChild(container);
-}
+                html += `
+                    <div style="margin-bottom: 20px;">
+                        <img src="${src}" 
+                             style="width:100%; max-width:320px; border-radius:16px; border:1px solid #334155; display:block;"
+                             alt="Generated image ${index + 1}">
+                        
+                        <div class="image-actions">
+                            <button onclick="downloadImage('${src}', ${index})" class="download-btn">
+                                ⬇️ Download
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
 
             container.innerHTML = html;
 
