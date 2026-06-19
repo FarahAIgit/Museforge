@@ -463,68 +463,63 @@
             });
         }
 
-        // ==================== IMAGE GENERATION ====================
+        // ==================== CLEAN IMAGE GENERATION ====================
         async function generateWithGrok(btn) {
             await generateImage(btn, '/api/generate-image', 'Grok');
         }
 
         async function generateWithChatGPT(btn) {
-    console.log("ChatGPT button clicked!");   // ← Add this line
-
-    const promptText = document.getElementById('prompt-output').innerText;
-    if (!promptText || promptText.includes('Click "Forge Prompt')) {
-        alert('Please generate a prompt first!');
-        return;
-    }
-
-    console.log("Calling generateImage for ChatGPT..."); // ← Add this line too
-
-    await generateImage(btn, '/api/generate-image-chatgpt', 'ChatGPT');
-}
-
-    const originalText = btn.innerHTML;
-    btn.innerHTML = `⏳ Generating with ${provider}...`;
-    btn.disabled = true;
-
-    // Remove old images
-    document.querySelectorAll('.generated-images').forEach(el => el.remove());
-
-    try {
-        const res = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: promptText, n: 2 })
-        });
-
-        const data = await res.json();
-        console.log(`${provider} Response:`, data); // Helpful for debugging
-
-        if (!res.ok) {
-            throw new Error(data.error || `Failed to generate with ${provider}`);
+            await generateImage(btn, '/api/generate-image-chatgpt', 'ChatGPT');
         }
 
-        // Handle both possible response formats
-        let images = [];
-        if (data.images && Array.isArray(data.images)) {
-            images = data.images;
-        } else if (data.data && Array.isArray(data.data)) {
-            images = data.data.map(item => item.url || item); // OpenAI format
+        async function generateImage(btn, endpoint, provider) {
+            const promptText = document.getElementById('prompt-output').innerText;
+            if (!promptText || promptText.includes('Click "Forge Prompt')) {
+                alert('Please generate a prompt first!');
+                return;
+            }
+
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `⏳ Generating with ${provider}...`;
+            btn.disabled = true;
+
+            document.querySelectorAll('.generated-images').forEach(el => el.remove());
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: promptText, n: 2 })
+                });
+
+                const data = await res.json();
+                console.log(`${provider} Response:`, data);
+
+                if (!res.ok) {
+                    throw new Error(data.error || `Failed to generate with ${provider}`);
+                }
+
+                let images = [];
+                if (data.images && Array.isArray(data.images)) {
+                    images = data.images;
+                } else if (data.data && Array.isArray(data.data)) {
+                    images = data.data.map(item => item.url || item);
+                }
+
+                if (images.length === 0) {
+                    throw new Error('No images returned from the server');
+                }
+
+                displayImages(images, `Generated with ${provider}`);
+
+            } catch (e) {
+                console.error(`${provider} Error:`, e);
+                alert(`Error generating with ${provider}: ${e.message}`);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
         }
-
-        if (images.length === 0) {
-            throw new Error('No images returned from the server');
-        }
-
-        displayImages(images, `Generated with ${provider}`);
-
-    } catch (e) {
-        console.error(`${provider} Error:`, e);
-        alert(`Error generating with ${provider}: ${e.message}`);
-    } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-    }
-}
 
         function displayImages(images, title) {
             document.querySelectorAll('.generated-images').forEach(el => el.remove());
@@ -537,19 +532,13 @@
             images.forEach((imgSrc, index) => {
                 if (!imgSrc) return;
 
-                let src = imgSrc;
-                if (typeof src === 'object' && src.url) src = src.url;
+                const src = (typeof imgSrc === 'object' && imgSrc.url) ? imgSrc.url : imgSrc;
 
                 html += `
                     <div style="margin-bottom: 20px;">
                         <img src="${src}" 
                              style="width:100%; max-width:320px; border-radius:16px; border:1px solid #334155; display:block;"
-                             alt="Generated image ${index + 1}"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                        
-                        <div style="display:none; color:#f87171; font-size:0.85rem; margin-top:6px;">
-                            Failed to load this image
-                        </div>
+                             alt="Generated image ${index + 1}">
                         
                         <div class="image-actions">
                             <button onclick="downloadImage('${src}', ${index})" class="download-btn">
