@@ -375,7 +375,7 @@
     const style = getRandom(stylePool);
     const pose = getRandom(posePool);
 
-    const prompt = `${photo} of a ${ethnicity} ${womanDesc} woman with \( {faceDesc} \){bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture`;
+    const prompt = `${photo} of a ${ethnicity} ${womanDesc} woman with ${faceDesc} ${bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture`;
 
     document.getElementById('prompt-output').innerHTML = prompt;
     document.getElementById('mode-badge').textContent = currentMode.toUpperCase();
