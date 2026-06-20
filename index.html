@@ -327,6 +327,20 @@
         const pools = {
             sfw_photo: ["closeup selfie", "full length mirror selfie", "studio portrait style", "in casual smartphone style", "mirror selfie", "full body mirror selfie"],
             nsfw_photo: ["amateur porn style", "like a thirst trap bathroom selfie", "style seductive bedroom mirror shot"],
+            lighting: [
+    "harsh flash",
+    "dim indoor lighting",
+    "natural window light",
+    "warm lamp light",
+    "cool overhead lighting",
+    "poor lighting",
+    "soft natural light",
+    "harsh bathroom lighting",
+    "yellowish indoor light",
+    "low light with noise",
+    "bright direct flash",
+    "mixed lighting"
+],
             ethnicity: [
     "Caucasian",
     "East Asian",
@@ -484,7 +498,8 @@ if (currentMode === 'sfw') {
     posePool = [...pools.sfw_pose, ...pools.nsfw_pose];
 }
 
-            const photo = `amateur photo ${getRandom(photoPool)}`;
+            const lighting = getRandom(pools.lighting);
+const photo = `amateur ${getRandom(photoPool)} with ${lighting}`;
             const ethnicity = getRandom(pools.ethnicity);
             const womanDesc = getRandom(pools.woman_desc);
 
