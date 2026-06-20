@@ -489,17 +489,27 @@
 ],
         };
 
+        // ==================== CONFIG ====================
+const SHOW_IMAGE_GENERATION = false;   // ← Change to true when ready
+// ===============================================
+
         let currentMode = 'sfw';
 
         function setMode(mode) {
-            currentMode = mode;
-            document.getElementById('sfw-btn').classList.toggle('active', mode === 'sfw');
-            document.getElementById('nsfw-btn').classList.toggle('active', mode === 'nsfw');
-            document.getElementById('mode-badge').textContent = mode.toUpperCase();
+    currentMode = mode;
+    document.getElementById('sfw-btn').classList.toggle('active', mode === 'sfw');
+    document.getElementById('nsfw-btn').classList.toggle('active', mode === 'nsfw');
+    document.getElementById('mode-badge').textContent = mode.toUpperCase();
 
-            const imageButtons = document.getElementById('image-generation-buttons');
-            imageButtons.style.display = (mode === 'sfw') ? 'block' : 'none';
-        }
+    const imageButtons = document.getElementById('image-generation-buttons');
+
+    // Only show image generation buttons if enabled AND in SFW mode
+    if (SHOW_IMAGE_GENERATION && mode === 'sfw') {
+        imageButtons.style.display = 'block';
+    } else {
+        imageButtons.style.display = 'none';
+    }
+}
 
         function getRandom(arr) {
             return arr[Math.floor(Math.random() * arr.length)];
