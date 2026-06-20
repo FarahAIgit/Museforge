@@ -401,7 +401,33 @@
 ],
             nsfw_pose: ["seductive pose with hand on hip", "sultry bedroom eyes half-lidded"],
             body_type: ["voluptuous hourglass figure", "curvy thick body"],
-            breasts: ["large natural breasts", "perky D-cup breasts"],
+            breasts: [
+    "small natural breasts",
+    "flat chest",
+    "modest small breasts",
+    "soft average breasts",
+    "slightly saggy breasts",
+    "small saggy breasts",
+    "full natural breasts",
+    "large natural breasts",
+    "heavy breasts with some sag",
+    "perky C-cup breasts",
+    "full D-cup breasts",
+    "large round breasts",
+    "heavy sagging breasts",
+    "soft heavy breasts",
+    "voluptuous breasts"
+],
+            areola: [
+    "small pink areolas",
+    "small brown areolas",
+    "large dark areolas",
+    "puffy pink areolas",
+    "prominent areolas",
+    "soft brown areolas",
+    "large puffy areolas",
+    "small sensitive areolas"
+],
             lower_body: ["wide hips and thick juicy thighs", "Saddlebag hips", "fat ass", "round bubble butt"]
         };
 
@@ -452,16 +478,17 @@ if (currentMode === 'sfw') {
 
             let bodyPart = '';
             if (currentMode === 'nsfw') {
-                const bodyType = getRandom(pools.body_type);
-                const breasts = getRandom(pools.breasts);
-                const lowerBody = getRandom(pools.lower_body);
-                bodyPart = `, ${bodyType} with ${breasts} and ${lowerBody}`;
+    const bodyType = getRandom(pools.body_type);
+    const breasts = getRandom(pools.breasts);
+    const areola = getRandom(pools.areola);
+    const lowerBody = getRandom(pools.lower_body);
+    bodyPart = `, ${bodyType} with ${breasts}, ${areola} and ${lowerBody}`;
             }
 
             const style = getRandom(stylePool);
             const pose = getRandom(posePool);
 
-            const prompt = `${photo} of a ${womanDesc} ${ethnicity} woman with ${faceDesc}${bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture`;
+            const prompt = `${photo} of a ${womanDesc} ${ethnicity} woman with ${faceDesc}${bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture, realistic subsurface scattering, slight film grain, natural imperfections, no plastic skin, highly detailed fabric tension and folds, authentic lighting`;
 
             document.getElementById('prompt-output').innerHTML = prompt;
             document.getElementById('mode-badge').textContent = currentMode.toUpperCase();
