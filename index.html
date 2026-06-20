@@ -466,6 +466,27 @@
     "small sensitive areolas"
 ],
             lower_body: ["wide hips and thick juicy thighs", "Saddlebag hips", "fat ass", "round bubble butt"]
+            nsfw_clothing: [
+    "tiny lace panties",
+    "sheer panties",
+    "micro thong",
+    "high-cut panties",
+    "cheeky panties",
+    "boyshorts",
+    "g-string",
+    "crotchless panties",
+    "strappy panties",
+    "wet look panties",
+    "lace thong",
+    "seamless panties",
+    "ripped panties",
+    "tiny bikini panties",
+    "sexy lingerie set",
+    "sheer bodysuit",
+    "fishnet stockings with panties",
+    "strappy lingerie",
+    "leather lingerie"
+],
         };
 
         let currentMode = 'sfw';
@@ -520,8 +541,9 @@ const photo = `amateur ${getRandom(photoPool)} with ${lighting}`;
     const breasts = getRandom(pools.breasts);
     const areola = getRandom(pools.areola);
     const lowerBody = getRandom(pools.lower_body);
-    bodyPart = `, ${bodyType} with ${breasts}, ${areola} and ${lowerBody}`;
-            }
+    const clothing = getRandom(pools.nsfw_clothing);
+    bodyPart = `, ${bodyType} with ${breasts}, ${areola}, ${lowerBody} wearing ${clothing}`;
+}
 
             const style = getRandom(stylePool);
             const pose = getRandom(posePool);
