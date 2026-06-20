@@ -325,8 +325,8 @@
 
     <script>
         const pools = {
-            sfw_photo: ["candid iPhone selfie", "natural daylight portrait", "professional studio portrait", "casual smartphone photo", "mirror selfie in natural light"],
-            nsfw_photo: ["raw candid amateur iPhone mirror selfie", "thirst trap bathroom selfie", "seductive bedroom mirror shot"],
+            sfw_photo: ["in candid iPhone selfie style", "in natural daylight", "studio portrait style", "in casual smartphone style", "mirror selfie", "full body mirror selfie"],
+            nsfw_photo: ["in raw candid amateur iPhone style", "like a thirst trap bathroom selfie", "style seductive bedroom mirror shot"],
             ethnicity: [
     "Caucasian",
     "East Asian",
@@ -435,7 +435,7 @@ if (currentMode === 'sfw') {
     posePool = [...pools.sfw_pose, ...pools.nsfw_pose];
 }
 
-            const photo = `amateur ${getRandom(photoPool)}`;
+            const photo = `amateur photo ${getRandom(photoPool)}`;
             const ethnicity = getRandom(pools.ethnicity);
             const womanDesc = getRandom(pools.woman_desc);
 
