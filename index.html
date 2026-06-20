@@ -48,43 +48,6 @@
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
             border: 1px solid #334155;
         }
-        .advanced-section {
-    margin-top: 20px;
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    padding: 12px 16px;
-}
-
-.advanced-section summary {
-    cursor: pointer;
-    font-weight: 600;
-    color: #94a3b8;
-}
-
-.advanced-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 12px;
-}
-
-.advanced-grid label {
-    display: block;
-    font-size: 0.8rem;
-    color: #64748b;
-    margin-bottom: 4px;
-}
-
-.advanced-grid input {
-    width: 100%;
-    background: #1e2937;
-    border: 1px solid #334155;
-    color: #e0e7ff;
-    padding: 8px 10px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-}
       
         .controls {
             display: flex;
@@ -317,8 +280,6 @@
                 <button onclick="generatePrompt()" class="generate-btn">
                     ✨ Forge Prompt
                 </button>
-                
-
             </div>
 
             <!-- Prompt Output -->
@@ -348,6 +309,39 @@
                 </div>
             </div>
 
+            <!-- Advanced Options -->
+            **Summary:**
+
+                    Advanced Options (Custom Overrides)
+                
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px;">
+                    <div>
+                        <label style="display:block; font-size:0.8rem; color:#64748b; margin-bottom:4px;">Style</label>
+                        <input type="text" id="override-style" placeholder="e.g. cyberpunk girl"
+                               style="width:100%; background:#1e2937; border:1px solid #334155; color:#e0e7ff; padding:8px 10px; border-radius:8px; font-size:0.9rem;">
+                    </div>
+                    <div>
+                        <label style="display:block; font-size:0.8rem; color:#64748b; margin-bottom:4px;">Pose</label>
+                        <input type="text" id="override-pose" placeholder="e.g. lying on bed looking at camera"
+                               style="width:100%; background:#1e2937; border:1px solid #334155; color:#e0e7ff; padding:8px 10px; border-radius:8px; font-size:0.9rem;">
+                    </div>
+                    <div>
+                        <label style="display:block; font-size:0.8rem; color:#64748b; margin-bottom:4px;">Hair</label>
+                        <input type="text" id="override-hair" placeholder="e.g. long pink hair with bangs"
+                               style="width:100%; background:#1e2937; border:1px solid #334155; color:#e0e7ff; padding:8px 10px; border-radius:8px; font-size:0.9rem;">
+                    </div>
+                    <div>
+                        <label style="display:block; font-size:0.8rem; color:#64748b; margin-bottom:4px;">Body (mainly for NSFW)</label>
+                        <input type="text" id="override-body" placeholder="e.g. curvy with soft belly"
+                               style="width:100%; background:#1e2937; border:1px solid #334155; color:#e0e7ff; padding:8px 10px; border-radius:8px; font-size:0.9rem;">
+                    </div>
+                </div>
+                
+                <p style="font-size:0.75rem; color:#64748b; margin-top:10px; margin-bottom:0;">
+                    Leave blank to use random. Filled fields will be forced into the prompt.
+                </p>
+
             <!-- Breakdown -->
             <div class="breakdown" id="breakdown-section" style="display:none;">
                 <h4>Breakdown</h4>
@@ -364,59 +358,10 @@
         const pools = {
             sfw_photo: ["closeup selfie", "full length mirror selfie holding phone", "studio portrait style", "in casual smartphone style", "mirror selfie holding phone", "full body mirror selfie holding phone"],
             nsfw_photo: ["amateur porn style", "like a thirst trap mirror selfie holding phone", "style seductive bedroom mirror selfie holding phone"],
-            lighting: [
-    "harsh flash",
-    "dim indoor lighting",
-    "natural window light",
-    "warm lamp light",
-    "cool overhead lighting",
-    "poor lighting",
-    "soft natural light",
-    "harsh bathroom lighting",
-    "yellowish indoor light",
-    "low light with noise",
-    "bright direct flash",
-    "mixed lighting"
-],
-            ethnicity: [
-    "Caucasian",
-    "East Asian",
-    "Korean",
-    "Japanese",
-    "Chinese",
-    "Southeast Asian",
-    "Indian",
-    "Pakistani",
-    "Persian",
-    "Levantine",
-    "North African",
-    "West African",
-    "East African",
-    "Afro-Caribbean",
-    "Black",
-    "Mexican",
-    "Brazilian",
-    "Indigenous",
-    "Mixed heritage"
-],
+            lighting: ["harsh flash", "dim indoor lighting", "natural window light", "warm lamp light", "cool overhead lighting", "poor lighting", "soft natural light", "harsh bathroom lighting", "yellowish indoor light", "low light with noise", "bright direct flash", "mixed lighting"],
+            ethnicity: ["Caucasian", "East Asian", "Korean", "Japanese", "Chinese", "Southeast Asian", "Indian", "Pakistani", "Persian", "Levantine", "North African", "West African", "East African", "Afro-Caribbean", "Black", "Mexican", "Brazilian", "Indigenous", "Mixed heritage"],
             hair_colour: ["black", "deep brown", "warm brown", "golden blonde", "light brown"],
-            hairstyle: [
-    "long straight hair",
-    "long wavy hair",
-    "shoulder-length wavy hair",
-    "short bob haircut",
-    "long curly hair",
-    "messy bun",
-    "high ponytail",
-    "loose waves",
-    "straight sleek hair",
-    "layered medium hair",
-    "pixie cut",
-    "braided hair",
-    "half-up half-down style",
-    "voluminous curls",
-    "wet look straight hair"
-],
+            hairstyle: ["long straight hair", "long wavy hair", "shoulder-length wavy hair", "short bob haircut", "long curly hair", "messy bun", "high ponytail", "loose waves", "straight sleek hair", "layered medium hair", "pixie cut", "braided hair", "half-up half-down style", "voluminous curls", "wet look straight hair"],
             eye_colour: ["deep brown", "hazel", "emerald green", "bright blue", "amber"],
             eye_shape: ["almond-shaped", "large and expressive", "hooded"],
             face_shape: ["heart-shaped face", "oval face", "round face"],
@@ -425,145 +370,30 @@
             cheeks_jaw: ["soft rounded cheeks", "defined yet soft jawline"],
             additional_face: ["visible pores and texture", "light freckles"],
             woman_desc: ["beautiful", "attractive", "cute", "average-looking", "soft-featured average"],
-            sfw_style: [
-    "alt girl",
-    "goth girl",
-    "preppy girl",
-    "boho girl",
-    "girl-next-door",
-    "soft girl",
-    "clean girl",
-    "coquette girl",
-    "indie girl",
-    "y2k girl",
-    "artsy girl",
-    "cottagecore girl",
-    "street style girl",
-    "minimalist girl",
-    "romantic girl",
-    "sporty girl",
-    "vintage girl",
-    "grunge girl",
-    "e-girl",
-    "academia girl",
-    "fairycore girl",
-    "coastal girl",
-    "tomboy girl",
-    "elegant girl",
-    "dreamy girl"
-],
+            sfw_style: ["alt girl", "goth girl", "preppy girl", "boho girl", "girl-next-door", "soft girl", "clean girl", "coquette girl", "indie girl", "y2k girl", "artsy girl", "cottagecore girl", "street style girl", "minimalist girl", "romantic girl", "sporty girl", "vintage girl", "grunge girl", "e-girl", "academia girl", "fairycore girl", "coastal girl", "tomboy girl", "elegant girl", "dreamy girl"],
             nsfw_style: ["seductive alt girl", "goth temptress", "sultry girl-next-door"],
-            sfw_pose: [
-    "warm smiling at camera",
-    "natural relaxed pose",
-    "gentle head tilt with soft smile",
-    "soft direct gaze with relaxed expression",
-    "confident but soft posture",
-    "relaxed hand resting near chin",
-    "slight head tilt with warm expression",
-    "calm and composed pose",
-    "playful but direct expression",
-    "leaning in slightly toward camera",
-    "three-quarter view with soft eye contact",
-    "subtle smile with gentle posture"
-],
+            sfw_pose: ["warm smiling at camera", "natural relaxed pose", "gentle head tilt with soft smile", "soft direct gaze with relaxed expression", "confident but soft posture", "relaxed hand resting near chin", "slight head tilt with warm expression", "calm and composed pose", "playful but direct expression", "leaning in slightly toward camera", "three-quarter view with soft eye contact", "subtle smile with gentle posture"],
             nsfw_pose: ["seductive pose with hand on hip", "sultry bedroom eyes half-lidded"],
-            body_type: [
-    "voluptuous hourglass figure",
-    "curvy thick body",
-    "soft pear-shaped figure",
-    "full apple-shaped body",
-    "slim thick figure",
-    "soft curvy body",
-    "chubby soft figure",
-    "athletic toned body",
-    "petite curvy frame",
-    "thick hourglass figure",
-    "soft rectangular body",
-    "full-figured soft body",
-    "curvy with a soft stomach",
-    "voluptuous with wide hips",
-    "skinny lithe frame",
-    "slim and delicate build",
-    "petite slim figure",
-    "bimbo-style exaggerated curves",
-    "curvy bimbo figure",
-    "toned athletic body",
-    "soft and plump figure",
-    "lean and slender build"
-],
-            breasts: [
-    "small natural breasts",
-    "flat chest",
-    "modest small breasts",
-    "soft average breasts",
-    "slightly saggy breasts",
-    "small saggy breasts",
-    "full natural breasts",
-    "large natural breasts",
-    "heavy breasts with some sag",
-    "perky C-cup breasts",
-    "full D-cup breasts",
-    "large round breasts",
-    "heavy sagging breasts",
-    "soft heavy breasts",
-    "voluptuous breasts"
-],
-            areola: [
-    "small pink areolas",
-    "small brown areolas",
-    "large dark areolas",
-    "puffy pink areolas",
-    "prominent areolas",
-    "soft brown areolas",
-    "large puffy areolas",
-    "small sensitive areolas"
-],
+            body_type: ["voluptuous hourglass figure", "curvy thick body", "soft pear-shaped figure", "full apple-shaped body", "slim thick figure", "soft curvy body", "chubby soft figure", "athletic toned body", "petite curvy frame", "thick hourglass figure", "soft rectangular body", "full-figured soft body", "curvy with a soft stomach", "voluptuous with wide hips", "skinny lithe frame", "slim and delicate build", "petite slim figure", "bimbo-style exaggerated curves", "curvy bimbo figure", "toned athletic body", "soft and plump figure", "lean and slender build"],
+            breasts: ["small natural breasts", "flat chest", "modest small breasts", "soft average breasts", "slightly saggy breasts", "small saggy breasts", "full natural breasts", "large natural breasts", "heavy breasts with some sag", "perky C-cup breasts", "full D-cup breasts", "large round breasts", "heavy sagging breasts", "soft heavy breasts", "voluptuous breasts"],
+            areola: ["small pink areolas", "small brown areolas", "large dark areolas", "puffy pink areolas", "prominent areolas", "soft brown areolas", "large puffy areolas", "small sensitive areolas"],
             lower_body: ["wide hips and thick juicy thighs", "Saddlebag hips", "fat ass", "round bubble butt"],
-            nsfw_clothing: [
-    "tiny lace panties",
-    "sheer panties",
-    "micro thong",
-    "high-cut panties",
-    "cheeky panties",
-    "boyshorts",
-    "g-string",
-    "crotchless panties",
-    "strappy panties",
-    "wet look panties",
-    "lace thong",
-    "seamless panties",
-    "ripped panties",
-    "tiny bikini panties",
-    "sexy lingerie set",
-    "sheer bodysuit",
-    "fishnet stockings with panties",
-    "strappy lingerie",
-    "leather lingerie"
-],
+            nsfw_clothing: ["tiny lace panties", "sheer panties", "micro thong", "high-cut panties", "cheeky panties", "boyshorts", "g-string", "crotchless panties", "strappy panties", "wet look panties", "lace thong", "seamless panties", "ripped panties", "tiny bikini panties", "sexy lingerie set", "sheer bodysuit", "fishnet stockings with panties", "strappy lingerie", "leather lingerie"]
         };
 
-        // ==================== CONFIG ====================
-const SHOW_IMAGE_GENERATION = true;   // ← Change to true when ready
-// ===============================================
+        const SHOW_IMAGE_GENERATION = true;
 
         let currentMode = 'sfw';
 
         function setMode(mode) {
-    currentMode = mode;
-    document.getElementById('sfw-btn').classList.toggle('active', mode === 'sfw');
-    document.getElementById('nsfw-btn').classList.toggle('active', mode === 'nsfw');
-    document.getElementById('mode-badge').textContent = mode.toUpperCase();
+            currentMode = mode;
+            document.getElementById('sfw-btn').classList.toggle('active', mode === 'sfw');
+            document.getElementById('nsfw-btn').classList.toggle('active', mode === 'nsfw');
+            document.getElementById('mode-badge').textContent = mode.toUpperCase();
 
-    const imageButtons = document.getElementById('image-generation-buttons');
-
-    // Only show image generation buttons if enabled AND in SFW mode
-    if (SHOW_IMAGE_GENERATION && mode === 'sfw') {
-        imageButtons.style.display = 'block';
-    } else {
-        imageButtons.style.display = 'none';
-    }
-}
+            const imageButtons = document.getElementById('image-generation-buttons');
+            imageButtons.style.display = (SHOW_IMAGE_GENERATION && mode === 'sfw') ? 'block' : 'none';
+        }
 
         function getRandom(arr) {
             return arr[Math.floor(Math.random() * arr.length)];
@@ -571,26 +401,27 @@ const SHOW_IMAGE_GENERATION = true;   // ← Change to true when ready
 
         function generatePrompt() {
             const photoPool = currentMode === 'sfw' ? pools.sfw_photo : pools.nsfw_photo;
-            let stylePool;
-let posePool;
 
-            // === ADVANCED OVERRIDES ===
-const overrideStyle = document.getElementById('override-style').value.trim();
-const overridePose = document.getElementById('override-pose').value.trim();
-const overrideHair = document.getElementById('override-hair').value.trim();
-const overrideBody = document.getElementById('override-body').value.trim();
-            
-if (currentMode === 'sfw') {
-    stylePool = pools.sfw_style;
-    posePool = pools.sfw_pose;
-} else {
-    // NSFW mode can use both SFW + NSFW styles and poses
-    stylePool = [...pools.sfw_style, ...pools.nsfw_style];
-    posePool = [...pools.sfw_pose, ...pools.nsfw_pose];
-}
+            let stylePool;
+            let posePool;
+
+            if (currentMode === 'sfw') {
+                stylePool = pools.sfw_style;
+                posePool = pools.sfw_pose;
+            } else {
+                stylePool = [...pools.sfw_style, ...pools.nsfw_style];
+                posePool = [...pools.sfw_pose, ...pools.nsfw_pose];
+            }
+
+            // Advanced Overrides
+            const overrideStyle = document.getElementById('override-style').value.trim();
+            const overridePose = document.getElementById('override-pose').value.trim();
+            const overrideHair = document.getElementById('override-hair').value.trim();
+            const overrideBody = document.getElementById('override-body').value.trim();
 
             const lighting = getRandom(pools.lighting);
-const photo = `amateur ${getRandom(photoPool)} with ${lighting}`;
+            const photo = `amateur ${getRandom(photoPool)} with ${lighting}`;
+
             const ethnicity = getRandom(pools.ethnicity);
             const womanDesc = getRandom(pools.woman_desc);
 
@@ -602,63 +433,34 @@ const photo = `amateur ${getRandom(photoPool)} with ${lighting}`;
             const cheeksJaw = getRandom(pools.cheeks_jaw);
             const extra = getRandom(pools.additional_face);
             const hairColour = getRandom(pools.hair_colour);
-let hairDescription = overrideHair || `${hairColour} hair`;
 
-// 70% chance to include a specific hairstyle, 30% chance to let the AI choose
-let hairDescription = `${hairColour} hair`;
-if (Math.random() < 0.7) {
-    const hairstyle = getRandom(pools.hairstyle);
-    hairDescription = `${hairstyle} in ${hairColour}`;
-}
+            // Hair with optional override
+            let hairDescription = overrideHair || (Math.random() < 0.7 
+                ? `${getRandom(pools.hairstyle)} in ${hairColour}` 
+                : `${hairColour} hair`);
 
-let faceDesc = `${faceShape}, ${cheeksJaw}, ${nose}, ${lips}, ${extra}, her eyes are ${eyeColour} and ${eyeShape}, ${hairDescription}`;
+            let faceDesc = `${faceShape}, ${cheeksJaw}, ${nose}, ${lips}, ${extra}, her eyes are ${eyeColour} and ${eyeShape}, ${hairDescription}`;
 
             let bodyPart = '';
             if (currentMode === 'nsfw') {
-    bodyPart = overrideBody 
-    ? `, ${overrideBody}` 
-    : `, ${bodyType} with ${breasts}, ${areola}, ${lowerBody} wearing ${clothing}`;
-    const breasts = getRandom(pools.breasts);
-    const areola = getRandom(pools.areola);
-    const lowerBody = getRandom(pools.lower_body);
-    const clothing = getRandom(pools.nsfw_clothing);
-    bodyPart = `, ${bodyType} with ${breasts}, ${areola}, ${lowerBody} wearing ${clothing}`;
-}
+                const bodyType = getRandom(pools.body_type);
+                const breasts = getRandom(pools.breasts);
+                const areola = getRandom(pools.areola);
+                const lowerBody = getRandom(pools.lower_body);
+                const clothing = getRandom(pools.nsfw_clothing);
+
+                bodyPart = overrideBody 
+                    ? `, ${overrideBody}` 
+                    : `, ${bodyType} with ${breasts}, ${areola}, ${lowerBody} wearing ${clothing}`;
+            }
 
             const style = overrideStyle || getRandom(stylePool);
-const pose = overridePose || getRandom(posePool);
+            const pose = overridePose || getRandom(posePool);
 
-            const prompt = `${photo} of a ${womanDesc} ${ethnicity} woman with ${faceDesc}${bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture, realistic subsurface scattering, slight film grain, natural imperfections, no plastic skin, highly detailed fabric tension and folds, authentic lighting`;
+            const prompt = `${photo} of a ${womanDesc} ${ethnicity} woman with \( {faceDesc} \){bodyPart}, ${style}, ${pose}, natural skin with visible pores and subtle texture`;
 
             document.getElementById('prompt-output').innerHTML = prompt;
             document.getElementById('mode-badge').textContent = currentMode.toUpperCase();
-
-            <!-- Advanced Options -->
-**Summary:**
-Advanced Options (Custom Overrides)
-    
-    <div class="advanced-grid">
-        <div>
-            <label>Style</label>
-            <input type="text" id="override-style" placeholder="e.g. cyberpunk girl">
-        </div>
-        <div>
-            <label>Pose</label>
-            <input type="text" id="override-pose" placeholder="e.g. lying on bed">
-        </div>
-        <div>
-            <label>Hair</label>
-            <input type="text" id="override-hair" placeholder="e.g. long pink hair with bangs">
-        </div>
-        <div>
-            <label>Body (NSFW)</label>
-            <input type="text" id="override-body" placeholder="e.g. curvy with soft belly">
-        </div>
-    </div>
-    
-    <p style="font-size: 0.8rem; color: #64748b; margin-top: 8px;">
-        Leave blank to use random generation. Filled fields will be forced into the prompt.
-    </p>
 
             showBreakdown({
                 photo, ethnicity, womanDesc, faceShape, eyeColour, eyeShape,
@@ -723,7 +525,6 @@ Advanced Options (Custom Overrides)
             });
         }
 
-        // ==================== IMAGE GENERATION ====================
         async function generateWithGrok(btn) {
             await generateImage(btn, '/api/generate-image', 'Grok');
         }
@@ -753,14 +554,13 @@ Advanced Options (Custom Overrides)
                 });
 
                 const data = await res.json();
-                console.log(`${provider} Response:`, data);
 
                 if (!res.ok) {
                     throw new Error(data.error || `Failed to generate with ${provider}`);
                 }
 
                 let images = data.images || [];
-                
+
                 if (images.length === 0) {
                     throw new Error('No images returned from the server');
                 }
@@ -786,7 +586,6 @@ Advanced Options (Custom Overrides)
 
             images.forEach((imgSrc, index) => {
                 if (!imgSrc) return;
-
                 const src = (typeof imgSrc === 'object' && imgSrc.url) ? imgSrc.url : imgSrc;
 
                 html += `
@@ -794,7 +593,6 @@ Advanced Options (Custom Overrides)
                         <img src="${src}" 
                              style="width:100%; max-width:320px; border-radius:16px; border:1px solid #334155; display:block;"
                              alt="Generated image ${index + 1}">
-                        
                         <div class="image-actions">
                             <button onclick="downloadImage('${src}', ${index})" class="download-btn">
                                 ⬇️ Download
@@ -805,7 +603,6 @@ Advanced Options (Custom Overrides)
             });
 
             container.innerHTML = html;
-
             const buttonsContainer = document.getElementById('image-generation-buttons');
             buttonsContainer.parentNode.appendChild(container);
         }
@@ -813,7 +610,7 @@ Advanced Options (Custom Overrides)
         function downloadImage(src, index) {
             const link = document.createElement('a');
             link.href = src;
-            link.download = `muse-forge-${Date.now()}-${index + 1}.jpg`;
+            link.download = `muse-forge-\( {Date.now()}- \){index + 1}.jpg`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
