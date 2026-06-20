@@ -402,7 +402,7 @@
             nsfw_pose: ["seductive pose with hand on hip", "sultry bedroom eyes half-lidded"],
             body_type: ["voluptuous hourglass figure", "curvy thick body"],
             breasts: ["large natural breasts", "perky D-cup breasts"],
-            lower_body: ["wide hips and thick juicy thighs", "round bubble butt"]
+            lower_body: ["wide hips and thick juicy thighs", "Saddlebag hips", "fat ass", "round bubble butt"]
         };
 
         let currentMode = 'sfw';
@@ -423,8 +423,17 @@
 
         function generatePrompt() {
             const photoPool = currentMode === 'sfw' ? pools.sfw_photo : pools.nsfw_photo;
-            const stylePool = currentMode === 'sfw' ? pools.sfw_style : pools.nsfw_style;
-            const posePool = currentMode === 'sfw' ? pools.sfw_pose : pools.nsfw_pose;
+            let stylePool;
+let posePool;
+
+if (currentMode === 'sfw') {
+    stylePool = pools.sfw_style;
+    posePool = pools.sfw_pose;
+} else {
+    // NSFW mode can use both SFW + NSFW styles and poses
+    stylePool = [...pools.sfw_style, ...pools.nsfw_style];
+    posePool = [...pools.sfw_pose, ...pools.nsfw_pose];
+}
 
             const photo = `amateur ${getRandom(photoPool)}`;
             const ethnicity = getRandom(pools.ethnicity);
