@@ -363,6 +363,23 @@
     "Mixed heritage"
 ],
             hair_colour: ["black", "deep brown", "warm brown", "golden blonde", "light brown"],
+            hairstyle: [
+    "long straight hair",
+    "long wavy hair",
+    "shoulder-length wavy hair",
+    "short bob haircut",
+    "long curly hair",
+    "messy bun",
+    "high ponytail",
+    "loose waves",
+    "straight sleek hair",
+    "layered medium hair",
+    "pixie cut",
+    "braided hair",
+    "half-up half-down style",
+    "voluminous curls",
+    "wet look straight hair"
+],
             eye_colour: ["deep brown", "hazel", "emerald green", "bright blue", "amber"],
             eye_shape: ["almond-shaped", "large and expressive", "hooded"],
             face_shape: ["heart-shaped face", "oval face", "round face"],
@@ -543,15 +560,14 @@ const photo = `amateur ${getRandom(photoPool)} with ${lighting}`;
             const extra = getRandom(pools.additional_face);
             const hairColour = getRandom(pools.hair_colour);
 
-// Randomly decide whether to include a specific hairstyle (70% chance)
+// 70% chance to include a specific hairstyle, 30% chance to let the AI choose
 let hairDescription = `${hairColour} hair`;
-
-if (Math.random() < 0.7) {   // ← Change 0.7 to adjust probability
+if (Math.random() < 0.7) {
     const hairstyle = getRandom(pools.hairstyle);
     hairDescription = `${hairstyle} in ${hairColour}`;
 }
 
-            let faceDesc = `${faceShape}, ${cheeksJaw}, ${nose}, ${lips}, ${extra}, her eyes are ${eyeColour} and ${eyeShape}, ${hairColour} hair`;
+let faceDesc = `${faceShape}, ${cheeksJaw}, ${nose}, ${lips}, ${extra}, her eyes are ${eyeColour} and ${eyeShape}, ${hairDescription}`;
 
             let bodyPart = '';
             if (currentMode === 'nsfw') {
