@@ -282,6 +282,45 @@
                 </button>
             </div>
 
+            <!-- Advanced Toggle Button -->
+<div style="margin-bottom: 8px; text-align: right;">
+    <button onclick="toggleAdvanced()" 
+            style="background: #1e2937; color: #94a3b8; border: 1px solid #334155; padding: 6px 14px; border-radius: 9999px; font-size: 0.85rem; cursor: pointer;">
+        ⚙️ Advanced
+    </button>
+</div>
+
+<!-- Hidden Advanced Panel -->
+<div id="advanced-panel" style="display: none; background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div>
+            <label style="display:block; font-size:0.8rem; color:#64748b; margin-bottom:4px;">Style</label>
+            <input type="text" id="override-style" placeholder="e.g. cyberpunk girl"
+                   style="width:100%; background:#1e2937; border:1px solid #334155; color:#e0e7ff; padding:8px 10px; border-radius:8px;">
+        </div>
+        <div>
+            <label style="display:block; font-size:0.8rem; color:#64748b; margin-bottom:4px;">Pose</label>
+            <input type="text" id="override-pose" placeholder="e.g. lying on bed"
+                   style="width:100%; background:#1e2937; border:1px solid #334155; color:#e0e7ff; padding:8px 10px; border-radius:8px;">
+        </div>
+        <div>
+            <label style="display:block; font-size:0.8rem; color:#64748b; margin-bottom:4px;">Hair</label>
+            <input type="text" id="override-hair" placeholder="e.g. long pink hair with bangs"
+                   style="width:100%; background:#1e2937; border:1px solid #334155; color:#e0e7ff; padding:8px 10px; border-radius:8px;">
+        </div>
+        <div>
+            <label style="display:block; font-size:0.8rem; color:#64748b; margin-bottom:4px;">Body (NSFW)</label>
+            <input type="text" id="override-body" placeholder="e.g. curvy with soft belly"
+                   style="width:100%; background:#1e2937; border:1px solid #334155; color:#e0e7ff; padding:8px 10px; border-radius:8px;">
+        </div>
+    </div>
+    
+    <p style="font-size:0.75rem; color:#64748b; margin-top:10px; margin-bottom:0;">
+        Leave blank to use random. Filled fields will override the prompt.
+    </p>
+</div>
+            
             <!-- Prompt Output -->
             <div class="output-container">
                 <div class="output-label">
@@ -310,46 +349,7 @@
             </div>
 
             <!-- Advanced Options -->
-**Summary:**
 
-        Advanced Options (Custom Overrides)
-    
-    
-    <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 14px;">
-        
-        <div>
-            <label style="display:block; font-size:0.85rem; color:#64748b; margin-bottom:5px;">Style</label>
-            <input type="text" id="override-style" placeholder="e.g. cyberpunk girl"
-                   style="width:100%; background:#1e2937; border:1px solid #334155; color:#e0e7ff; padding:10px 12px; border-radius:8px; font-size:0.95rem;">
-        </div>
-        
-        <div>
-            <label style="display:block; font-size:0.85rem; color:#64748b; margin-bottom:5px;">Pose</label>
-            <input type="text" id="override-pose" placeholder="e.g. lying on bed looking at camera"
-                   style="width:100%; background:#1e2937; border:1px solid #334155; color:#e0e7ff; padding:10px 12px; border-radius:8px; font-size:0.95rem;">
-        </div>
-        
-        <div>
-            <label style="display:block; font-size:0.85rem; color:#64748b; margin-bottom:5px;">Hair</label>
-            <input type="text" id="override-hair" placeholder="e.g. long pink hair with bangs"
-                   style="width:100%; background:#1e2937; border:1px solid #334155; color:#e0e7ff; padding:10px 12px; border-radius:8px; font-size:0.95rem;">
-        </div>
-        
-        <div>
-            <label style="display:block; font-size:0.85rem; color:#64748b; margin-bottom:5px;">Body (NSFW)</label>
-            <input type="text" id="override-body" placeholder="e.g. curvy with soft belly and thick thighs"
-                   style="width:100%; background:#1e2937; border:1px solid #334155; color:#e0e7ff; padding:10px 12px; border-radius:8px; font-size:0.95rem;">
-        </div>
-        
-    </div>
-    
-    <p style="font-size:0.75rem; color:#64748b; margin-top:12px; margin-bottom:0;">
-        Leave fields blank to use random generation. Anything you type will be forced into the prompt.
-    </p>
-                
-                <p style="font-size:0.75rem; color:#64748b; margin-top:10px; margin-bottom:0;">
-                    Leave blank to use random. Filled fields will be forced into the prompt.
-                </p>
 
             <!-- Breakdown -->
             <div class="breakdown" id="breakdown-section" style="display:none;">
