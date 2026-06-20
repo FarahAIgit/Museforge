@@ -543,6 +543,14 @@ const photo = `amateur ${getRandom(photoPool)} with ${lighting}`;
             const extra = getRandom(pools.additional_face);
             const hairColour = getRandom(pools.hair_colour);
 
+// Randomly decide whether to include a specific hairstyle (70% chance)
+let hairDescription = `${hairColour} hair`;
+
+if (Math.random() < 0.7) {   // ← Change 0.7 to adjust probability
+    const hairstyle = getRandom(pools.hairstyle);
+    hairDescription = `${hairstyle} in ${hairColour}`;
+}
+
             let faceDesc = `${faceShape}, ${cheeksJaw}, ${nose}, ${lips}, ${extra}, her eyes are ${eyeColour} and ${eyeShape}, ${hairColour} hair`;
 
             let bodyPart = '';
