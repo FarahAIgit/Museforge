@@ -99,69 +99,72 @@
             transform: translateY(-2px);
             box-shadow: 0 15px 20px -3px rgb(15 118 110 / 0.5);
         }
+      
         @keyframes spin {
-    to { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
-      .advanced-options {
-    margin-top: 20px;
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 14px;
-    overflow: hidden;
-}
-
-.advanced-options summary {
-    padding: 16px 20px;
-    cursor: pointer;
-    font-weight: 600;
-    color: #e2e8f0;
-    list-style: none;
-}
-
-.advanced-options summary::-webkit-details-marker {
-    display: none;
-}
-
-.advanced-options summary::after {
-    content: "▼";
-    float: right;
-    transition: transform 0.2s ease;
-}
-
-.advanced-options[open] summary::after {
-    transform: rotate(180deg);
-}
-
-.advanced-content {
-    padding: 0 20px 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
-}
-
-.advanced-content label {
-    display: block;
-    font-size: 0.8rem;
-    color: #64748b;
-    margin-bottom: 4px;
-}
-
-.advanced-content input {
-    width: 100%;
-    box-sizing: border-box;
-    background: #1e2937;
-    border: 1px solid #334155;
-    color: #e0e7ff;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-.advanced-help {
-    padding: 0 20px 20px;
-    font-size: 0.75rem;
-    color: #64748b;
-    margin: 0;
-}
+      
+        .advanced-options {
+            margin-top: 20px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+      
+        .advanced-options summary {
+            padding: 16px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #e2e8f0;
+            list-style: none;
+        }
+      
+        .advanced-options summary::-webkit-details-marker {
+            display: none;
+        }
+      
+        .advanced-options summary::after {
+            content: "▼";
+            float: right;
+            transition: transform 0.2s ease;
+        }
+      
+        .advanced-options[open] summary::after {
+            transform: rotate(180deg);
+        }
+      
+        .advanced-content {
+            padding: 0 20px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+      
+        .advanced-content label {
+            display: block;
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+      
+        .advanced-content input {
+            width: 100%;
+            box-sizing: border-box;
+            background: #1e2937;
+            border: 1px solid #334155;
+            color: #e0e7ff;
+            padding: 10px;
+            border-radius: 8px;
+        }
+      
+        .advanced-help {
+            padding: 0 20px 20px;
+            font-size: 0.75rem;
+            color: #64748b;
+            margin: 0;
+        }
+      
         .output-container {
             margin-top: 24px;
             position: relative;
@@ -334,46 +337,42 @@
         <div class="card">
             <!-- Controls -->
             <div class="controls">
-    <div class="mode-toggle">
-        <button id="sfw-btn" class="mode-btn active" onclick="setMode('sfw')">SFW</button>
-        <button id="nsfw-btn" class="mode-btn" onclick="setMode('nsfw')">NSFW</button>
-    </div>
+                <div class="mode-toggle">
+                    <button id="sfw-btn" class="mode-btn active" onclick="setMode('sfw')">SFW</button>
+                    <button id="nsfw-btn" class="mode-btn" onclick="setMode('nsfw')">NSFW</button>
+                </div>
+                
+                <button onclick="generatePrompt()" class="generate-btn">
+                    ✨ Forge Prompt
+                </button>
+            </div>
 
-    <button onclick="generatePrompt()" class="generate-btn">
-        ✨ Forge Prompt
-    </button>
-</div>
+            <!-- Advanced Options -->
+            **Summary:**
+Advanced Overrides
 
-<!-- Advanced Options -->
-<details class="advanced-options">
-    <summary>Advanced Overrides</summary>
+                <div class="advanced-content">
+                    <div>
+                        <label>Style</label>
+                        <input type="text" id="override-style" placeholder="e.g. cyberpunk girl">
+                    </div>
+                    <div>
+                        <label>Pose</label>
+                        <input type="text" id="override-pose" placeholder="e.g. lying on bed">
+                    </div>
+                    <div>
+                        <label>Hair</label>
+                        <input type="text" id="override-hair" placeholder="e.g. long pink hair with bangs">
+                    </div>
+                    <div>
+                        <label>Body (NSFW)</label>
+                        <input type="text" id="override-body" placeholder="e.g. curvy with soft belly">
+                    </div>
+                </div>
 
-    <div class="advanced-content">
-        <div>
-            <label>Style</label>
-            <input type="text" id="override-style" placeholder="e.g. cyberpunk girl">
-        </div>
-
-        <div>
-            <label>Pose</label>
-            <input type="text" id="override-pose" placeholder="e.g. lying on bed">
-        </div>
-
-        <div>
-            <label>Hair</label>
-            <input type="text" id="override-hair" placeholder="e.g. long pink hair with bangs">
-        </div>
-
-        <div>
-            <label>Body (NSFW)</label>
-            <input type="text" id="override-body" placeholder="e.g. curvy with soft belly">
-        </div>
-    </div>
-
-    <p class="advanced-help">
-        Leave blank to use random. Filled fields will override the prompt.
-    </p>
-</details>
+                <p class="advanced-help">
+                    Leave blank to use random. Filled fields will override the prompt.
+                </p>
 
             <!-- Prompt Output -->
             <div class="output-container">
@@ -401,13 +400,14 @@
                     </button>
                 </div>
             </div>
+
             <!-- Loading Indicator -->
-<div id="image-loading" style="display: none; margin-top: 16px; padding: 12px 16px; background: #1e2937; border-radius: 10px; border: 1px solid #334155; text-align: center;">
-    <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-        <div class="spinner" style="width: 18px; height: 18px; border: 3px solid #334155; border-top-color: #60a5fa; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-        <span id="loading-text" style="color: #94a3b8; font-size: 0.95rem;">Generating images...</span>
-    </div>
-</div>
+            <div id="image-loading" style="display: none; margin-top: 16px; padding: 12px 16px; background: #1e2937; border-radius: 10px; border: 1px solid #334155; text-align: center;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <div class="spinner" style="width: 18px; height: 18px; border: 3px solid #334155; border-top-color: #60a5fa; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <span id="loading-text" style="color: #94a3b8; font-size: 0.95rem;">Generating images...</span>
+                </div>
+            </div>
 
             <!-- Breakdown -->
             <div class="breakdown" id="breakdown-section" style="display:none;">
@@ -479,7 +479,6 @@
                 posePool = [...pools.sfw_pose, ...pools.nsfw_pose];
             }
 
-            // Advanced Overrides
             const overrideStyle = document.getElementById('override-style').value.trim();
             const overridePose = document.getElementById('override-pose').value.trim();
             const overrideHair = document.getElementById('override-hair').value.trim();
@@ -599,59 +598,20 @@
         }
 
         async function generateImage(btn, endpoint, provider) {
-    const promptText = document.getElementById('prompt-output').innerText;
-    if (!promptText || promptText.includes('Click "Forge Prompt')) {
-        alert('Please generate a prompt first!');
-        return;
-    }
-
-    const originalText = btn.innerHTML;
-    btn.innerHTML = `⏳ Generating...`;
-    btn.disabled = true;
-
-    // Show loading indicator
-    const loadingDiv = document.getElementById('image-loading');
-    const loadingText = document.getElementById('loading-text');
-    loadingText.innerText = `Generating with ${provider}... (this can take 10–40 seconds)`;
-    loadingDiv.style.display = 'block';
-
-    document.querySelectorAll('.generated-images').forEach(el => el.remove());
-
-    try {
-        const res = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: promptText, n: 2 })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            throw new Error(data.error || `Failed to generate with ${provider}`);
-        }
-
-        let images = data.images || [];
-        if (images.length === 0) {
-            throw new Error('No images returned from the server');
-        }
-
-        displayImages(images, `Generated with ${provider}`);
-
-    } catch (e) {
-        console.error(`${provider} Error:`, e);
-        alert(`Error generating with ${provider}: ${e.message}`);
-    } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-
-        // Hide loading indicator
-        loadingDiv.style.display = 'none';
-    }
-        }
+            const promptText = document.getElementById('prompt-output').innerText;
+            if (!promptText || promptText.includes('Click "Forge Prompt')) {
+                alert('Please generate a prompt first!');
+                return;
+            }
 
             const originalText = btn.innerHTML;
-            btn.innerHTML = `⏳ Generating with ${provider}...`;
+            btn.innerHTML = `⏳ Generating...`;
             btn.disabled = true;
+
+            const loadingDiv = document.getElementById('image-loading');
+            const loadingText = document.getElementById('loading-text');
+            loadingText.innerText = `Generating with ${provider}... (this can take 10–40 seconds)`;
+            loadingDiv.style.display = 'block';
 
             document.querySelectorAll('.generated-images').forEach(el => el.remove());
 
@@ -681,6 +641,7 @@
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
+                loadingDiv.style.display = 'none';
             }
         }
 
