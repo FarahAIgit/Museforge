@@ -377,7 +377,32 @@
         Leave blank to use random. Filled fields will override the prompt.
     </p>
 </details>
+<!-- Prompt Output -->
+<div class="output-container">
+    <div class="output-label">
+        <span>Generated Prompt</span>
+        <span class="badge" id="mode-badge">SFW</span>
+    </div>
 
+    <div class="prompt-box" id="prompt-output">
+        Click "Forge Prompt" to create a new prompt...
+    </div>
+
+    <button onclick="copyPrompt()" class="copy-btn">
+        📋 Copy to Clipboard
+    </button>
+
+    <!-- Image Generation Buttons -->
+    <div id="image-generation-buttons" style="display:none; margin-top:16px;">
+        <button id="grok-btn" onclick="generateWithGrok(this)" class="grok-btn">
+            🖼️ Generate with Grok
+        </button>
+
+        <button id="chatgpt-btn" onclick="generateWithChatGPT(this)" class="chatgpt-btn">
+            🖼️ Generate with ChatGPT
+        </button>
+    </div>
+</div>
 
             <!-- Loading Indicator -->
             <div id="image-loading" style="display: none; margin-top: 16px; padding: 12px 16px; background: #1e2937; border-radius: 10px; border: 1px solid #334155; text-align: center;">
