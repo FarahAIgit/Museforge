@@ -422,7 +422,12 @@
                 stylePool = [...pools.sfw_style, ...pools.nsfw_style];
                 posePool = [...pools.sfw_pose, ...pools.nsfw_pose];
             }
-
+function toggleAdvanced() {
+    const panel = document.getElementById('advanced-panel');
+    panel.style.display = (panel.style.display === 'none' || panel.style.display === '') 
+        ? 'block' 
+        : 'none';
+}
             // Advanced Overrides
             const overrideStyle = document.getElementById('override-style').value.trim();
             const overridePose = document.getElementById('override-pose').value.trim();
