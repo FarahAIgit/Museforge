@@ -371,6 +371,10 @@
             <label>Body (NSFW)</label>
             <input type="text" id="override-body" placeholder="e.g. curvy with soft belly">
         </div>
+        <div>
+    <label>Clothing</label>
+    <input type="text" id="override-clothing" placeholder="e.g. tiny black thong, fishnet stockings">
+        </div>
     </div>
 
     <p class="advanced-help">
@@ -486,7 +490,7 @@
             const overridePose = document.getElementById('override-pose').value.trim();
             const overrideHair = document.getElementById('override-hair').value.trim();
             const overrideBody = document.getElementById('override-body').value.trim();
-
+            const overrideClothing = document.getElementById('override-clothing').value.trim();
             const lighting = getRandom(pools.lighting);
             const photo = `amateur ${getRandom(photoPool)} with ${lighting}`;
 
@@ -510,15 +514,15 @@
 
             let bodyPart = '';
             if (currentMode === 'nsfw') {
-                const bodyType = getRandom(pools.body_type);
-                const breasts = getRandom(pools.breasts);
-                const areola = getRandom(pools.areola);
-                const lowerBody = getRandom(pools.lower_body);
-                const clothing = getRandom(pools.nsfw_clothing);
+    const bodyType = getRandom(pools.body_type);
+    const breasts = getRandom(pools.breasts);
+    const areola = getRandom(pools.areola);
+    const lowerBody = getRandom(pools.lower_body);
+    const clothing = overrideClothing || getRandom(pools.nsfw_clothing);
 
-                bodyPart = overrideBody 
-                    ? `, ${overrideBody}` 
-                    : `, ${bodyType} with ${breasts}, ${areola}, ${lowerBody} wearing ${clothing}`;
+    bodyPart = overrideBody 
+        ? `, ${overrideBody}` 
+        : `, ${bodyType} with ${breasts}, ${areola}, ${lowerBody} wearing ${clothing}`;
             }
 
             const style = overrideStyle || getRandom(stylePool);
