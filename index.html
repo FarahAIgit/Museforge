@@ -535,12 +535,14 @@
             let bodyPart = '';
 let clothing = '';
 
-// Get clothing (works for both SFW and NSFW)
+// Get clothing
 if (overrideClothing) {
     clothing = overrideClothing;
 } else {
     if (currentMode === 'nsfw') {
-        clothing = getRandom(pools.nsfw_clothing);
+        // NSFW can use both SFW and NSFW clothing for more variety
+        const combinedClothing = [...pools.sfw_clothing, ...pools.nsfw_clothing];
+        clothing = getRandom(combinedClothing);
     } else {
         clothing = getRandom(pools.sfw_clothing);
     }
@@ -557,7 +559,6 @@ if (currentMode === 'nsfw') {
         ? `, ${overrideBody}` 
         : `, ${bodyType} with ${breasts}, ${areola}, ${lowerBody} wearing ${clothing}`;
 } else {
-    // SFW mode - just add clothing if it exists
     if (clothing) {
         bodyPart = `, wearing ${clothing}`;
     }
