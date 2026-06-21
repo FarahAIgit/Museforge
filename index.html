@@ -99,6 +99,9 @@
             transform: translateY(-2px);
             box-shadow: 0 15px 20px -3px rgb(15 118 110 / 0.5);
         }
+        @keyframes spin {
+    to { transform: rotate(360deg); }
+        }
       .advanced-options {
     margin-top: 20px;
     background: #0f172a;
@@ -398,6 +401,13 @@
                     </button>
                 </div>
             </div>
+            <!-- Loading Indicator -->
+<div id="image-loading" style="display: none; margin-top: 16px; padding: 12px 16px; background: #1e2937; border-radius: 10px; border: 1px solid #334155; text-align: center;">
+    <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <div class="spinner" style="width: 18px; height: 18px; border: 3px solid #334155; border-top-color: #60a5fa; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        <span id="loading-text" style="color: #94a3b8; font-size: 0.95rem;">Generating images...</span>
+    </div>
+</div>
 
             <!-- Breakdown -->
             <div class="breakdown" id="breakdown-section" style="display:none;">
@@ -589,11 +599,55 @@
         }
 
         async function generateImage(btn, endpoint, provider) {
-            const promptText = document.getElementById('prompt-output').innerText;
-            if (!promptText || promptText.includes('Click "Forge Prompt')) {
-                alert('Please generate a prompt first!');
-                return;
-            }
+    const promptText = document.getElementById('prompt-output').innerText;
+    if (!promptText || promptText.includes('Click "Forge Prompt')) {
+        alert('Please generate a prompt first!');
+        return;
+    }
+
+    const originalText = btn.innerHTML;
+    btn.innerHTML = `⏳ Generating...`;
+    btn.disabled = true;
+
+    // Show loading indicator
+    const loadingDiv = document.getElementById('image-loading');
+    const loadingText = document.getElementById('loading-text');
+    loadingText.innerText = `Generating with ${provider}... (this can take 10–40 seconds)`;
+    loadingDiv.style.display = 'block';
+
+    document.querySelectorAll('.generated-images').forEach(el => el.remove());
+
+    try {
+        const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: promptText, n: 2 })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.error || `Failed to generate with ${provider}`);
+        }
+
+        let images = data.images || [];
+        if (images.length === 0) {
+            throw new Error('No images returned from the server');
+        }
+
+        displayImages(images, `Generated with ${provider}`);
+
+    } catch (e) {
+        console.error(`${provider} Error:`, e);
+        alert(`Error generating with ${provider}: ${e.message}`);
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+
+        // Hide loading indicator
+        loadingDiv.style.display = 'none';
+    }
+        }
 
             const originalText = btn.innerHTML;
             btn.innerHTML = `⏳ Generating with ${provider}...`;
