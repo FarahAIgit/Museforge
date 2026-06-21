@@ -337,33 +337,36 @@
         <div class="card">
             <!-- Controls -->
             <div class="controls">
-                <div class="mode-toggle">
-                    <button id="sfw-btn" class="mode-btn active" onclick="setMode('sfw')">SFW</button>
-                    <button id="nsfw-btn" class="mode-btn" onclick="setMode('nsfw')">NSFW</button>
-                </div>
-                
-                <button onclick="generatePrompt()" class="generate-btn">
-                    ✨ Forge Prompt
-                </button>
-            </div>
+    <div class="mode-toggle">
+        <button id="sfw-btn" class="mode-btn active" onclick="setMode('sfw')">SFW</button>
+        <button id="nsfw-btn" class="mode-btn" onclick="setMode('nsfw')">NSFW</button>
+    </div>
 
-            <!-- Advanced Options -->
-**Summary:**
-Advanced Overrides
+    <button onclick="generatePrompt()" class="generate-btn">
+        ✨ Forge Prompt
+    </button>
+</div>
+
+<!-- Advanced Options -->
+<details class="advanced-options">
+    <summary>⚙️ Advanced Options (Custom Overrides)</summary>
 
     <div class="advanced-content">
         <div>
             <label>Style</label>
             <input type="text" id="override-style" placeholder="e.g. cyberpunk girl">
         </div>
+
         <div>
             <label>Pose</label>
             <input type="text" id="override-pose" placeholder="e.g. lying on bed">
         </div>
+
         <div>
             <label>Hair</label>
             <input type="text" id="override-hair" placeholder="e.g. long pink hair with bangs">
         </div>
+
         <div>
             <label>Body (NSFW)</label>
             <input type="text" id="override-body" placeholder="e.g. curvy with soft belly">
@@ -373,37 +376,9 @@ Advanced Overrides
     <p class="advanced-help">
         Leave blank to use random. Filled fields will override the prompt.
     </p>
+</details>
 
-                <p class="advanced-help">
-                    Leave blank to use random. Filled fields will override the prompt.
-                </p>
 
-            <!-- Prompt Output -->
-            <div class="output-container">
-                <div class="output-label">
-                    <span>Generated Prompt</span>
-                    <span class="badge" id="mode-badge">SFW</span>
-                </div>
-                
-                <div class="prompt-box" id="prompt-output">
-                    Click "Forge Prompt" to create a new prompt...
-                </div>
-                
-                <button onclick="copyPrompt()" class="copy-btn">
-                    📋 Copy to Clipboard
-                </button>
-
-                <!-- Image Generation Buttons -->
-                <div id="image-generation-buttons" style="display: none; margin-top: 16px;">
-                    <button id="grok-btn" onclick="generateWithGrok(this)" class="grok-btn">
-                        🖼️ Generate with Grok
-                    </button>
-                    
-                    <button id="chatgpt-btn" onclick="generateWithChatGPT(this)" class="chatgpt-btn">
-                        🖼️ Generate with ChatGPT
-                    </button>
-                </div>
-            </div>
 
             <!-- Loading Indicator -->
             <div id="image-loading" style="display: none; margin-top: 16px; padding: 12px 16px; background: #1e2937; border-radius: 10px; border: 1px solid #334155; text-align: center;">
