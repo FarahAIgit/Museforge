@@ -453,6 +453,23 @@
             areola: ["small pink areolas", "small brown areolas", "large dark areolas", "puffy pink areolas", "prominent areolas", "soft brown areolas", "large puffy areolas", "small sensitive areolas"],
             lower_body: ["wide hips and thick juicy thighs", "Saddlebag hips", "fat ass", "round bubble butt"],
             nsfw_clothing: ["tiny lace panties", "sheer panties", "micro thong", "high-cut panties", "cheeky panties", "boyshorts", "g-string", "loose panties", "small and baggy panties", "strappy panties", "wet look panties", "lace thong", "seamless panties", "ripped panties", "tiny bikini panties", "sexy lingerie set", "sheer bodysuit", "fishnet stockings with panties", "strappy lingerie", "leather lingerie"]
+            sfw_clothing: [
+    "oversized hoodie",
+    "crop top and jeans",
+    "black turtleneck",
+    "white tank top and shorts",
+    "baggy cargo pants",
+    "tight dress",
+    "leather jacket",
+    "fishnet top",
+    "sports bra and leggings",
+    "off-shoulder sweater",
+    "plaid skirt",
+    "mesh top",
+    "denim shorts",
+    "silk blouse",
+    "band t-shirt"
+],
         };
 
         const SHOW_IMAGE_GENERATION = false;
@@ -513,17 +530,35 @@
             let faceDesc = `${faceShape}, ${cheeksJaw}, ${nose}, ${lips}, ${extra}, her eyes are ${eyeColour} and ${eyeShape}, ${hairDescription}`;
 
             let bodyPart = '';
-            if (currentMode === 'nsfw') {
+let clothing = '';
+
+// Get clothing (works for both SFW and NSFW)
+if (overrideClothing) {
+    clothing = overrideClothing;
+} else {
+    if (currentMode === 'nsfw') {
+        clothing = getRandom(pools.nsfw_clothing);
+    } else {
+        clothing = getRandom(pools.sfw_clothing);
+    }
+}
+
+// Build bodyPart
+if (currentMode === 'nsfw') {
     const bodyType = getRandom(pools.body_type);
     const breasts = getRandom(pools.breasts);
     const areola = getRandom(pools.areola);
     const lowerBody = getRandom(pools.lower_body);
-    const clothing = overrideClothing || getRandom(pools.nsfw_clothing);
 
     bodyPart = overrideBody 
         ? `, ${overrideBody}` 
         : `, ${bodyType} with ${breasts}, ${areola}, ${lowerBody} wearing ${clothing}`;
-            }
+} else {
+    // SFW mode - just add clothing if it exists
+    if (clothing) {
+        bodyPart = `, wearing ${clothing}`;
+    }
+}
 
             const style = overrideStyle || getRandom(stylePool);
             const pose = overridePose || getRandom(posePool);
